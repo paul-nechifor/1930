@@ -1,0 +1,38 @@
+{
+    "copyHttpFilesTo": null,
+    "webSocketAddress": "localhost",
+    "webSocketPort": 5757,
+    "faFile": "data/four-answers",
+    "naFile": "data/number-answers",
+    "mapFile": "data/map.json",
+    "maximumPlayers": 64,
+    "maxTextMessageSize": 300,
+    "messageCodes": [
+        "RoomInfoMsg",
+        "FromTextMsg",
+        "PlayerTextMsg"
+    ],
+    "jsFilesOrder": [
+        "gen.js",
+        "globals.js",
+        "util.js",
+        "ScrollContainer.js",
+        "MessageWindow.js",
+        "AbstractTab.js",
+        "MessagesTab.js",
+        "SelfTab.js",
+        "OthersTab.js",
+        "TabbedView.js",
+        "Positions.js",
+        "Zone.js",
+        "AttackArrow.js",
+        "MapCamera.js",
+        "Minimap.js",
+        "Map.js",
+        "ContextView.js",
+        "Gui.js",
+        "Player.js",
+        "Game.js",
+        "main.js"
+    ]
+}
