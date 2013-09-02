@@ -15,14 +15,23 @@ public class Config {
     public String faFile;
     public String naFile;
     public String mapFile;
+    public String botNamesFile;
     
     public int aiTick;
+    
+    // Things not in the config JSON file.
+    public String[] botNames;
     
     private Config() {
     }
     
     public static Config load(String relativePath) throws IOException {
         File file = Util.getJarRelative(relativePath);
-        return Json.fromFilePath(file, Config.class);
+        Config ret = Json.fromFilePath(file, Config.class);
+        
+        File botNamesFile = new File(ret.botNamesFile);
+        ret.botNames = Json.fromFilePath(botNamesFile, String[].class);
+        
+        return ret;
     }
 }

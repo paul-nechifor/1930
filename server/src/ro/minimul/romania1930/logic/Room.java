@@ -1,6 +1,7 @@
 package ro.minimul.romania1930.logic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import ro.minimul.romania1930.Game;
@@ -152,6 +153,9 @@ public class Room {
         int nZones = roomInfo.map.zones.length;
         int zonesPerBot = nZones / nBots;
         
+        List<String> names = Arrays.asList(config.botNames);
+        Collections.shuffle(names);
+        
         List<Integer> ids = new ArrayList<Integer>();
         List<AiPlayer> unadded = new ArrayList<AiPlayer>();
         
@@ -164,7 +168,7 @@ public class Room {
         
         for (int i = 0; i < nBots; i++) {
             AiPlayer player = new AiPlayer(ids.get(i));
-            player.setName("Jucătorul nr. " + (i + 1));
+            player.setName(names.get(i));
             roomInfo.idUsed[i] = true;
             unadded.set(ids.get(i), player);
             
