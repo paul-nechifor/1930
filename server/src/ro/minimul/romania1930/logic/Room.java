@@ -1,6 +1,7 @@
 package ro.minimul.romania1930.logic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import ro.minimul.romania1930.Game;
 import ro.minimul.romania1930.ai.AiContainer;
@@ -150,13 +151,21 @@ public class Room {
         int nZones = roomInfo.map.zones.length;
         int zonesPerBot = nZones / nBots;
         
+        List<Integer> ids = new ArrayList<Integer>();
         List<AiPlayer> unadded = new ArrayList<AiPlayer>();
         
         for (int i = 0; i < nBots; i++) {
-            AiPlayer player = new AiPlayer(i);
+            ids.add(i);
+            unadded.add(null);
+        }
+        
+        Collections.shuffle(ids);
+        
+        for (int i = 0; i < nBots; i++) {
+            AiPlayer player = new AiPlayer(ids.get(i));
             player.setName("Jucătorul nr. " + (i + 1));
             roomInfo.idUsed[i] = true;
-            unadded.add(player);
+            unadded.set(ids.get(i), player);
             
             int total = zonesPerBot;
             // Give the last bot all the remaining zones.
