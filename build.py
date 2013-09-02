@@ -9,6 +9,8 @@ import shutil
 import subprocess
 import sys
 
+CONFIG_PATH = 'config.json'
+
 def main():
     types = ['separate', 'simple', 'advanced']
     argc = len(sys.argv)
@@ -21,7 +23,8 @@ def main():
     print 'Types are:', types
 
 def build(type):
-    config, configFile = getConfig()
+    configFile = CONFIG_PATH
+    config = json.loads(open(configFile).read())
 
     if os.path.exists('build'):
         shutil.rmtree('build')
@@ -31,13 +34,6 @@ def build(type):
     buildClient(config, type)
 
     print '(Wipes hands.) All done!'
-
-def getConfig():
-    name = 'config.json'
-    if not os.path.exists(name):
-        print 'I told you to copy it... Meh, whatever...'
-        name = 'config-sample.json'
-    return json.loads(open(name).read()), name
 
 def buildServer(config, configFile):
     print 'Cooking the WebSocket server.'
@@ -76,14 +72,7 @@ def buildClient(config, type):
 
 def buildGenFile(config):
     GEN = {}
-    copyProps = [
-        'webSocketAddress',
-        'webSocketPort',
-        'messageCodes',
-        'maxTextMessageSize',
-        'maximumPlayers'
-    ]
-    for prop in copyProps:
+    for prop in config['clientPublicValues']:
         GEN[prop] = config[prop]
 
     file = open('build/client/js/gen.js').read() + """
@@ -136,7 +125,6 @@ def compile(files, output, level=None):
     args.append(output)
 
     subprocess.call(args)
-
 
 def generateServerFiles(config):
     pass

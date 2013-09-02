@@ -43,13 +43,13 @@ instead.
 Configuration
 -------------
 
-Copy `config-sample.json` to `config.json`. Edit the file and change:
+The configuration file is `config.json`. You might want to change:
 
-* **copyHttpFilesTo**: This is the location where your webserver will serve the
-files. If `null`, the files will be just in `build/http-files`.
 * **websocketAddress**: Where you run the java websocket server. Leave to
 `localhost` for yourself.
 * **websocketPort**: The port for it.
+* **copyHttpFilesTo**: This is the location where your webserver will serve the
+files. If `null`, the files will be just in `build/http-files`.
 
 Build the WebSocket server and construct the HTTP files. Run:
 

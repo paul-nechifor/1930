@@ -6,8 +6,12 @@ import java.util.Set;
 
 class AiThread extends Thread {
     private final Set<AiPlayer> aiPlayers = new HashSet<AiPlayer>();
-    
+    private final int aiTick;
     private volatile boolean keepRunning = false;
+
+    public AiThread(int aiTick) {
+        this.aiTick = aiTick;
+    }
     
     @Override 
     public void run() {
@@ -30,6 +34,11 @@ class AiThread extends Thread {
                         }
                     }
                 }
+            }
+            
+            try {
+                Thread.sleep(aiTick);
+            } catch (InterruptedException ex) {
             }
         }
     }

@@ -6,13 +6,17 @@ import ro.minimul.romania1930.util.Json;
 import ro.minimul.romania1930.util.Util;
 
 public class Config {
+    //public String webSocketAddress;
     public int webSocketPort;
-    public int maximumPlayers;
     public int maxTextMessageSize;
+    public int maximumPlayers;
+    public String[] messageCodes;
+    
     public String faFile;
     public String naFile;
     public String mapFile;
-    public String[] messageCodes;
+    
+    public int aiTick;
     
     private Config() {
     }

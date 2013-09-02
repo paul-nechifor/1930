@@ -17,9 +17,9 @@ import ro.minimul.romania1930.web_logic.WebPlayer;
 
 public class Room {
     private final Game game;
-    private final AiContainer aiContainer = new AiContainer();
     private Config config;
     private RoomInfo roomInfo;
+    private AiContainer aiContainer;
     
     private class Controls implements PlayerControls {
         final Player player;
@@ -89,6 +89,7 @@ public class Room {
     public synchronized void open() {
         config = this.game.getConfig();
         roomInfo = new RoomInfo(this.game.getMap(), config);
+        aiContainer = new AiContainer(config);
         initializeWithBots();
         aiContainer.start();
     }

@@ -1,16 +1,27 @@
 {
-    "copyHttpFilesTo": null,
     "webSocketAddress": "localhost",
     "webSocketPort": 5757,
-    "faFile": "data/four-answers",
-    "naFile": "data/number-answers",
-    "mapFile": "data/map.json",
-    "maximumPlayers": 64,
     "maxTextMessageSize": 300,
+    "maximumPlayers": 64,
     "messageCodes": [
         "RoomInfoMsg",
         "FromTextMsg",
         "PlayerTextMsg"
+    ],
+
+    "faFile": "data/four-answers",
+    "naFile": "data/number-answers",
+    "mapFile": "data/map.json",
+    
+    "aiTick": 20,
+    "copyHttpFilesTo": null,
+
+    "clientPublicValues": [
+        "webSocketAddress",
+        "webSocketPort",
+        "maxTextMessageSize",
+        "maximumPlayers",
+        "messageCodes"
     ],
     "jsFilesOrder": [
         "gen.js",
