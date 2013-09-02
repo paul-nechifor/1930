@@ -2,6 +2,7 @@ package ro.minimul.romania1930.web_logic;
 
 import ro.minimul.romania1930.comm.Connection;
 import ro.minimul.romania1930.comm.msg.PlayerTextMsg;
+import ro.minimul.romania1930.comm.msg.ReplaceMsg;
 import ro.minimul.romania1930.comm.msg.RoomInfoMsg;
 import ro.minimul.romania1930.data.Zone;
 import ro.minimul.romania1930.logic.AttackQuestion;
@@ -31,10 +32,6 @@ public class WebPlayerEvents implements PlayerEvents {
 
     @Override
     public void onEnteredRoom(Player player) {
-    }
-
-    @Override
-    public void onExitedRoom(Player player, boolean error) {
     }
 
     @Override
@@ -72,5 +69,6 @@ public class WebPlayerEvents implements PlayerEvents {
 
     @Override
     public void onReplace(Player oldOne, Player newOne) {
+        connection.sendMessage(new ReplaceMsg(oldOne.id, newOne.isHuman));
     }
 }

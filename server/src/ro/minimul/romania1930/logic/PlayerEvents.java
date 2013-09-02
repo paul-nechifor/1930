@@ -11,7 +11,6 @@ public interface PlayerEvents {
      */
     public void onForcedExit(String reason);
     public void onEnteredRoom(Player player);
-    public void onExitedRoom(Player player, boolean error);
     public void onChangedName(Player player, String name);
     public void onSaid(Player player, String text);
     public void onAttackZone(Player player, Zone zone);
@@ -19,6 +18,6 @@ public interface PlayerEvents {
     public void onDonatedZones(Player from, Player to, Zone[] zones);
     public void onAnsweredQuestion(AttackQuestion question, int answer);
     public void onQuestionDone(AttackQuestion question, QuestionAnswers answers);
-    public void onReplace(Player oldOne, Player newOne);
     public void onAttackDone();
+    public void onReplace(Player oldOne, Player newOne);
 }

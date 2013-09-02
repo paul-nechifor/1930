@@ -6,7 +6,8 @@
     "messageCodes": [
         "RoomInfoMsg",
         "FromTextMsg",
-        "PlayerTextMsg"
+        "PlayerTextMsg",
+        "ReplaceMsg"
     ],
 
     "faFile": "data/four-answers",

@@ -36,11 +36,6 @@ class AiPlayerEvents implements PlayerEvents {
     }
 
     @Override
-    public void onExitedRoom(Player player, boolean error) {
-        // Not interested.
-    }
-
-    @Override
     public void onChangedName(Player player, String name) {
         // Not interested.
     }

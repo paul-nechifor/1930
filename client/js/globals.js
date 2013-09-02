@@ -43,7 +43,11 @@ var STR = {
     others: 'Alții',
     self: 'Tu',
     messageToSend: 'mesajul de trimis',
-    noWebSockets: 'Navigatorul tău n-are WebSockets. Ia Google Chrome!'
+    noWebSockets: 'Navigatorul tău n-are WebSockets. Ia Google Chrome!',
+    replaceHumanWithHuman: 'Jucătorul {1} a fost înlocuit de jucătorul {2}.',
+    replaceHumanWithRobot: 'Jucătorul {1} a fost înlocuit de robotul {2}.',
+    replaceRobotWithHuman: 'Robotul {1} a fost înlocuit de jucătorul {2}.',
+    replaceRobotWithRobot: 'Robotul {1} a fost înlocuit de robotul {2}.',
 };
 
 // Message IDs. This is populated at start up.

@@ -54,7 +54,7 @@ Game.prototype.createConnection = function () {
 
 Game.prototype.setPc = function (pc) {
     this.pc = pc;
-    this.pc.isRobot = false;
+    this.pc.isHuman = true;
     
     // Replacing the color for the current player.
     changePcColors(this.pc.id);
@@ -108,7 +108,7 @@ Game.prototype.onWebSocket_PlayerTextMsg = function (msg) {
     var player = this.players[msg.id];
     
     var from = player.name;
-    if (player.isRobot) {
+    if (!player.isHuman) {
         from += STR.robot;
     }
     if (msg.id === this.pc.id) {
@@ -118,6 +118,30 @@ Game.prototype.onWebSocket_PlayerTextMsg = function (msg) {
     this.gui.messages.add(msg.text, 'msg', from);
 };
 
+Game.prototype.onWebSocket_ReplaceMsg = function (msg) {
+    var player = this.players[msg.id];
+    
+    var aHuman = player.isHuman;
+    player.isHuman = msg.isHuman;
+    var bHuman = player.isHuman;
+    
+    var format;
+    
+    if (aHuman && bHuman) {
+        format = STR.replaceHumanWithHuman;
+    } else if (aHuman && !bHuman) {
+        format = STR.replaceHumanWithRobot;
+    } else if (!aHuman && bHuman) {
+        format = STR.replaceRobotWithHuman;
+    } else if (!aHuman && !bHuman) {
+        format = STR.replaceRobotWithRobot;
+    }
+    
+    var text = fmt(format, player.name, player.name);
+    
+    this.gui.others.add(text, 'replace');
+};
+
 Game.prototype.sendMsg = function (code, msg) {
     this.webSocket.send(String.fromCharCode(code) + JSON.stringify(msg));
 };
@@ -125,7 +149,7 @@ Game.prototype.sendMsg = function (code, msg) {
 Game.prototype.initPlayer = function (playerInfo) {
     var player = new Player({
         id: playerInfo.id,
-        isRobot: !playerInfo.isHuman,
+        isHuman: playerInfo.isHuman,
         name: playerInfo.name
     });
 

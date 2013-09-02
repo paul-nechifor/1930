@@ -85,3 +85,15 @@ function chooseSize(size, array) {
     
     return array[array.length - 1];
 }
+
+/**
+ * Basic formatting of string. Indexing starts from 1. Example
+ * `fmt('Hi {1}, from {2}.', 'Alice', 'Bob')` => 'Hi Alice, from Bob.'
+ */
+function fmt() {
+    var str = arguments[0];
+    var args = arguments;
+    return str.replace(/{(\d+)}/g, function (match, index) { 
+        return args[index];
+    });
+}
