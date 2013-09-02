@@ -3,12 +3,17 @@ package ro.minimul.romania1930.comm;
 import java.io.IOException;
 import ro.minimul.romania1930.web.WebSocket;
 
-public class WebPlayerConnection {
+public class Connection {
+    public static interface Listener {
+        public void onMessage(Message message);
+        public void onEnd(boolean error);
+    }
+    
     private final WebSocket webSocket;
     private final MessageMapping messageMapping;
     private final ConnectionThread connectionThread;
     
-    public WebPlayerConnection(WebSocket webSocket,
+    public Connection(WebSocket webSocket,
             MessageMapping messageMapping) {
         this.webSocket = webSocket;
         this.messageMapping = messageMapping;
@@ -37,7 +42,7 @@ public class WebPlayerConnection {
         }
     }
     
-    public void setListener(ConnectionThread.Listener listener) {
+    public void setListener(Listener listener) {
         connectionThread.setListener(listener);
     }
 }

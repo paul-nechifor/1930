@@ -1,6 +1,6 @@
 package ro.minimul.romania1930.web_logic;
 
-import ro.minimul.romania1930.comm.WebPlayerConnection;
+import ro.minimul.romania1930.comm.Connection;
 import ro.minimul.romania1930.comm.msg.PlayerTextMsg;
 import ro.minimul.romania1930.comm.msg.RoomInfoMsg;
 import ro.minimul.romania1930.data.Zone;
@@ -12,9 +12,9 @@ import ro.minimul.romania1930.logic.QuestionAnswers;
 import ro.minimul.romania1930.logic.RoomInfo;
 
 public class WebPlayerEvents implements PlayerEvents {
-    private final WebPlayerConnection connection;
+    private final Connection connection;
     
-    public WebPlayerEvents(WebPlayerConnection connection) {
+    public WebPlayerEvents(Connection connection) {
         this.connection = connection;
     }
 

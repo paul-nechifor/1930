@@ -5,14 +5,14 @@ import java.util.List;
 import ro.minimul.romania1930.comm.msg.PlayerSubMsg;
 import ro.minimul.romania1930.data.Zone;
 
-public abstract class Player {
+public abstract class Player<T extends PlayerEvents> {
     public final int id;
     public final boolean isHuman;
     public final List<Zone> zones = new ArrayList<Zone>();
-    public final PlayerEvents playerEvents;
+    public final T playerEvents;
     private String name;
     
-    public Player(int id, boolean isHuman, PlayerEvents playerEvents) {
+    public Player(int id, boolean isHuman, T playerEvents) {
         this.id = id;
         this.isHuman = isHuman;
         this.playerEvents = playerEvents;

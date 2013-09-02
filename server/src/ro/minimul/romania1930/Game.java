@@ -1,7 +1,7 @@
 package ro.minimul.romania1930;
 
 import java.io.IOException;
-import ro.minimul.romania1930.comm.ConnectionManager;
+import ro.minimul.romania1930.comm.Acceptor;
 import ro.minimul.romania1930.data.Config;
 import ro.minimul.romania1930.data.Map;
 import ro.minimul.romania1930.data.QuestionSet;
@@ -10,7 +10,7 @@ import ro.minimul.romania1930.logic.Room;
 public class Game {
     private Config config;
     private QuestionSet questionSet;
-    private ConnectionManager connectionManager;
+    private Acceptor connectionManager;
     private Map map;
 
     private Room room;
@@ -23,7 +23,7 @@ public class Game {
         questionSet = QuestionSet.load(config);
         map = Map.load(config);
 
-        connectionManager = new ConnectionManager(config);
+        connectionManager = new Acceptor(config);
         room = new Room(this);
     }
     
@@ -47,7 +47,7 @@ public class Game {
         return this.questionSet;
     }
     
-    public ConnectionManager getConnectionManager() {
+    public Acceptor getConnectionManager() {
         return this.connectionManager;
     }
     

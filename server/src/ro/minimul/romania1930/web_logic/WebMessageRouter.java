@@ -9,7 +9,7 @@ import ro.minimul.romania1930.logic.PlayerControls;
 /**
  * Handles translating from Message objects to PlayerControls calls.
  */
-public class MessageRouter {
+public class WebMessageRouter {
     private static interface Call<M extends Message> {
         public void call(PlayerControls controls, M message);
     }
@@ -26,7 +26,7 @@ public class MessageRouter {
         });
     }
     
-    public MessageRouter() {
+    public WebMessageRouter() {
     }
 
     public void route(PlayerControls controls, Message message) {

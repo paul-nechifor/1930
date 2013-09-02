@@ -59,7 +59,7 @@ There are 3 HTTP files build modes:
 
 * **separate** (default): Include all the JavaScript files separately.
 * **simple**: Join the files into one and perform simple optimizations with
-Google Closure
+Google Closure.
 * **advanced**: The same with advanced optimizations. Sadly this doesn't work
 now.
 
@@ -69,17 +69,17 @@ Data files
 ### Map
 
 The map data is in `data/map.json`. This includes the SVG paths for the
-teritories, their neighbours, names, etc.
+territories, their neighbours, names, etc.
 
 I'll probably add other countries (real or otherwise) in the future.
 
 ### Questions
 
 I'm not sure if I can make my question data files public so I don't include them
-here. I will give them to you if you ask me privatly.
+here. I will give them to you if you ask me privately.
 
-The question files are `data/four-answer` and `data/number-answer`. They are in
-a simple text format and only contain two bogus questions there.
+The question files are `data/four-answers` and `data/number-answers`. They are
+in a simple text format and only contain two bogus questions there.
 
 Running
 -------
@@ -92,6 +92,6 @@ Check the HTTP server. If you don't have one running just use Python for
 testing. Run:
     
     cd build/http-files
-    python -m SimpleHTTPServer 8888
+    python -m SimpleHTTPServer 7777
 
-and then connect to `localhost:8888`.
+and then go to [localhost:7777](http://localhost:7777).

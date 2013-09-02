@@ -8,10 +8,14 @@ import ro.minimul.romania1930.logic.PlayerEvents;
 import ro.minimul.romania1930.logic.QuestionAnswers;
 import ro.minimul.romania1930.logic.RoomInfo;
 
-public class AiPlayerEvents implements PlayerEvents {
+class AiPlayerEvents implements PlayerEvents {
     private Player self;
     private PlayerControls controls;
     private RoomInfo roomInfo;
+    
+    public void codeFailure() {
+        controls.exitRoom(true);
+    }
 
     @Override
     public void onPersonalStart(Player self, PlayerControls controls,

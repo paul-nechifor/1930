@@ -1,14 +1,10 @@
 package ro.minimul.romania1930.comm;
 
 import java.io.IOException;
+import ro.minimul.romania1930.comm.Connection.Listener;
 import ro.minimul.romania1930.web.WebSocket;
 
-public class ConnectionThread extends Thread {
-    public static interface Listener {
-        public void onMessage(Message message);
-        public void onEnd(boolean error);
-    }
-    
+class ConnectionThread extends Thread {
     private static final Listener DEFAULT_LISTENER = new Listener() {
         @Override
         public void onMessage(Message message) {

@@ -3,20 +3,20 @@ package ro.minimul.romania1930.logic;
 import java.util.ArrayList;
 import java.util.List;
 import ro.minimul.romania1930.Game;
+import ro.minimul.romania1930.ai.AiContainer;
 import ro.minimul.romania1930.ai.AiPlayer;
-import ro.minimul.romania1930.comm.AcceptorThread;
-import ro.minimul.romania1930.comm.ConnectionManager;
-import ro.minimul.romania1930.comm.ConnectionThread;
+import ro.minimul.romania1930.comm.Acceptor;
+import ro.minimul.romania1930.comm.Connection;
 import ro.minimul.romania1930.comm.Message;
-import ro.minimul.romania1930.comm.WebPlayerConnection;
 import ro.minimul.romania1930.comm.msg.RoomInfoMsg;
 import ro.minimul.romania1930.data.Config;
 import ro.minimul.romania1930.data.Zone;
-import ro.minimul.romania1930.web_logic.MessageRouter;
+import ro.minimul.romania1930.web_logic.WebMessageRouter;
 import ro.minimul.romania1930.web_logic.WebPlayer;
 
 public class Room {
     private final Game game;
+    private final AiContainer aiContainer = new AiContainer();
     private Config config;
     private RoomInfo roomInfo;
     
@@ -58,19 +58,19 @@ public class Room {
     public Room(Game game) {
         this.game = game;
         
-        ConnectionManager cm = this.game.getConnectionManager();
-        final MessageRouter messageRouter
+        Acceptor cm = this.game.getConnectionManager();
+        final WebMessageRouter messageRouter
                 = game.getConnectionManager().messageRouter;
         
-        cm.setOnAcceptListener(new AcceptorThread.Listener() {
+        cm.setOnAcceptListener(new Acceptor.Listener() {
             @Override
-            public void onAccept(WebPlayerConnection connection) {
+            public void onAccept(Connection connection) {
                 final Controls playerControls = tryToAccept(connection);
                 if (playerControls == null) {
                     return;
                 }
                 
-                connection.setListener(new ConnectionThread.Listener() {
+                connection.setListener(new Connection.Listener() {
                     @Override
                     public void onMessage(Message message) {
                         messageRouter.route(playerControls, message);
@@ -89,41 +89,37 @@ public class Room {
         config = this.game.getConfig();
         roomInfo = new RoomInfo(this.game.getMap(), config);
         initializeWithBots();
+        aiContainer.start();
     }
     
     public synchronized void close() {
         for (Player player : roomInfo.players) {
             player.playerEvents.onForcedExit("Going down.");
         }
+        aiContainer.stop();
     }
     
-    private synchronized Controls tryToAccept(WebPlayerConnection c) {
+    private synchronized Controls tryToAccept(Connection c) {
         //Player bot = getBestBot();
-        Player bot = getRandomBot();
+        AiPlayer bot = getRandomBot();
         if (bot == null) {
             c.sendMessage(RoomInfoMsg.fromFull());
             return null;
         }
         
-        Player player = new WebPlayer(bot.id, c);
+        WebPlayer player = new WebPlayer(bot.id, c);
         replacePlayers(bot, player);
         player.setName(bot.getName());
         
-        Controls playerControls = new Controls(player);
-        addPlayerToRoom(player, playerControls);
+        Controls playerControls = addWebPlayerToRoom(player);
 
         return playerControls;
     }
     
     private synchronized void exitRoom(Player player, boolean error) {
-//        roomInfo.players.remove(player);
-//        for (Player other : roomInfo.players) {
-//            other.playerEvents.onExitedRoom(player, error);
-//        }
-        
-        Player bot = new AiPlayer(player.id);
+        AiPlayer bot = new AiPlayer(player.id);
         replacePlayers(player, bot);
-        addPlayerToRoom(bot);
+        addAiPlayerToRoom(bot);
     }
 
     private synchronized void changeName(Player player, String name) {
@@ -154,11 +150,11 @@ public class Room {
         int nZones = roomInfo.map.zones.length;
         int zonesPerBot = nZones / nBots;
         
-        List<Player> unadded = new ArrayList<Player>();
+        List<AiPlayer> unadded = new ArrayList<AiPlayer>();
         
         for (int i = 0; i < nBots; i++) {
-            Player player = new AiPlayer(i);
-            player.setName("Jucatorul nr. " + (i + 1));
+            AiPlayer player = new AiPlayer(i);
+            player.setName("Jucătorul nr. " + (i + 1));
             roomInfo.idUsed[i] = true;
             unadded.add(player);
             
@@ -174,12 +170,12 @@ public class Room {
             }
         }
         
-        for (Player player : unadded) {
-            addPlayerToRoom(player);
+        for (AiPlayer player : unadded) {
+            addAiPlayerToRoom(player);
         }
     }
     
-    private Player getBestBot() {
+    private AiPlayer getBestBot() {
         Player best = null;
         int bestNZones = 0;
         int nZones;
@@ -192,15 +188,15 @@ public class Room {
             }
         }
         
-        return best;
+        return (AiPlayer) best;
     }
     
-    private Player getRandomBot() {
-        ArrayList<Player> bots = new ArrayList<Player>();
+    private AiPlayer getRandomBot() {
+        List<AiPlayer> bots = new ArrayList<AiPlayer>();
         
         for (Player player : roomInfo.players) {
             if (!player.isHuman) {
-                bots.add(player);
+                bots.add((AiPlayer) player);
             }
         }
         
@@ -211,16 +207,23 @@ public class Room {
         return bots.get((int) (Math.random() * bots.size()));
     }
     
+    private void addAiPlayerToRoom(AiPlayer aiPlayer) {
+        addPlayerToRoom(aiPlayer, new Controls(aiPlayer));
+        aiContainer.addPlayer(aiPlayer);
+    }
+    
+    private Controls addWebPlayerToRoom(WebPlayer webPlayer) {
+        Controls playerControls = new Controls(webPlayer);
+        addPlayerToRoom(webPlayer, playerControls);
+        return playerControls;
+    }
+    
     private void addPlayerToRoom(Player player, PlayerControls playerControls) {
         player.playerEvents.onPersonalStart(player, playerControls, roomInfo);
         roomInfo.players.add(player);
     }
     
-    private void addPlayerToRoom(Player player) {
-        addPlayerToRoom(player, new Controls(player));
-    }
-    
-    private void replacePlayers(Player oldOne, Player newOne) {
+    private void replacePlayers(Player<?> oldOne, Player<?> newOne) {
         for (Zone zone : oldOne.zones.toArray(new Zone[0])) {
             transforZone(zone, oldOne, newOne);
         }
@@ -228,6 +231,10 @@ public class Room {
         // Tell the old player to forcefully exit (just in case) and remove him.
         oldOne.playerEvents.onForcedExit("You are being replaced.");
         roomInfo.players.remove(oldOne);
+        
+        if (oldOne instanceof AiPlayer) {
+            aiContainer.removePlayer((AiPlayer) oldOne);
+        }
         
         // Tell all the other players that he's been replaced.
         for (Player player : roomInfo.players) {
