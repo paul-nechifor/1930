@@ -4,8 +4,9 @@ function Gui(game) {
     
     this.positions = null;
     
-    this.map = null
     this.minimap = null;
+    this.map = null
+    this.attacksView = null;
     this.contextView = null;
     this.tabbedView = null;
     this.messages = null;
@@ -20,6 +21,9 @@ Gui.prototype.setup = function () {
     this.minimap.setup();
     this.map = new Map(this);
     this.map.setup();
+    this.attacksView = new AttacksView(this);
+    this.attacksView.setup();
+    
     this.contextView = new ContextView(this);
     this.contextView.setup();
     this.tabbedView = new TabbedView(this);
@@ -46,8 +50,9 @@ Gui.prototype.setupSize = function () {
     
     window.onresize = function () {
         that.positions.realign(window.innerWidth, window.innerHeight);
-        that.map.onResize();
         that.minimap.onResize();
+        that.map.onResize();
+        that.attacksView.onResize();
         that.contextView.onResize();
         that.tabbedView.onResize();
     };
@@ -74,6 +79,8 @@ Gui.prototype.onZoneClicked = function (zone) {
 Gui.prototype.onZoneSelectedForAttack = function (to) {
     var from = this.map.selectedZone;
     this.map.clearSelection();
+    
+    this.game.onAttack(from, to);
     
     // Set the to busy while the server responds to the attack request.
     from.isAttackingZone = to;

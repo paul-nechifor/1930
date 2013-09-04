@@ -43,6 +43,8 @@
         "Minimap.js",
         "Map.js",
         "ContextView.js",
+        "AttackTimer.js",
+        "AttacksView.js",
         "Gui.js",
         "Player.js",
         "Game.js",

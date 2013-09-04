@@ -1,4 +1,6 @@
 var COLORS = {
+    dark: '#222',
+    lightDark: '#444',
     zoneStartFill: '#CCDDEE',
     zoneStartStroke: '#EEEEEE',
     zoneNameFontColor: '#FFFFFF',

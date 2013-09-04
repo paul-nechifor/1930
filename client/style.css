@@ -164,6 +164,21 @@ body {
     background-color: #222;
 }
 
+#attacks-view {
+    position: fixed;
+    text-align: center;
+}
+
+#attacks-view svg {
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+#attacks-view svg:first-child {
+    margin-left: 0;
+}
+
 .tabs {
     font-size: 10px;
     height: 20px;
