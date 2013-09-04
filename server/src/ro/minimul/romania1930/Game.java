@@ -10,9 +10,9 @@ import ro.minimul.romania1930.logic.Room;
 public class Game {
     private Config config;
     private QuestionSet questionSet;
-    private Acceptor connectionManager;
     private Map map;
-
+    
+    private Acceptor connectionManager;
     private Room room;
     
     public Game() {
@@ -22,7 +22,7 @@ public class Game {
         config = Config.load("config.json");
         questionSet = QuestionSet.load(config);
         map = Map.load(config);
-
+        
         connectionManager = new Acceptor(config);
         room = new Room(this);
     }

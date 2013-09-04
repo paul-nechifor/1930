@@ -118,6 +118,23 @@ Game.prototype.onWebSocket_PlayerTextMsg = function (msg) {
     this.gui.messages.add(msg.text, 'msg', from);
 };
 
+Game.prototype.onWebSocket_AttackZoneMsg = function (msg) {
+    var zones = this.gui.map.zones;
+    var from = zones[msg.from];
+    var to = zones[msg.to];
+    
+    var who = from.owner.name;
+    if (from.owner.id === this.pc.id) {
+        who += STR.me;
+    }
+    
+    var text = fmt(STR.hasAttacked, from.owner.name, to.name, to.owner.name);
+    this.gui.others.add(text, 'attack');
+};
+
+Game.prototype.onWebSocket_AttackFailedMsg = function (msg) {
+};
+
 Game.prototype.onWebSocket_ReplaceMsg = function (msg) {
     var player = this.players[msg.id];
     
@@ -146,8 +163,22 @@ Game.prototype.sendMsg = function (code, msg) {
     this.webSocket.send(String.fromCharCode(code) + JSON.stringify(msg));
 };
 
-Game.prototype.onAttackZone = function (from, to) {
+Game.prototype.sendTextMessage = function (text) {
+    text = text.trim();
     
+    if (text.length === 0) {
+        return;
+    }
+    
+    if (text.length > GEN.maxMessageSize) {
+        text = text.substring(0, GEN.maxTextMessageSize);
+    }
+    
+    this.sendMsg(MID.FromTextMsg, {text: text});
+}
+
+Game.prototype.onAttackZone = function (from, to) {
+    this.sendMsg(MID.AttackZoneMsg, {from: from.id, to: to.id});
 };
 
 Game.prototype.initPlayer = function (playerInfo) {
@@ -164,20 +195,6 @@ Game.prototype.initPlayer = function (playerInfo) {
     
     return player;
 };
-
-Game.prototype.sendTextMessage = function (text) {
-    text = text.trim();
-    
-    if (text.length === 0) {
-        return;
-    }
-    
-    if (text.length > GEN.maxMessageSize) {
-        text = text.substring(0, GEN.maxTextMessageSize);
-    }
-    
-    this.sendMsg(MID.FromTextMsg, {text: text});
-}
 
 Game.prototype.fatalError = function (text) {
     this.gui.self.add(text, 'error');

@@ -3,7 +3,6 @@ package ro.minimul.romania1930.comm;
 import java.io.IOException;
 import ro.minimul.romania1930.data.Config;
 import ro.minimul.romania1930.web.WebSocketServer;
-import ro.minimul.romania1930.web_logic.WebMessageRouter;
 
 public class Acceptor {
     public static interface Listener {
@@ -11,8 +10,6 @@ public class Acceptor {
     }
     
     private final AcceptorThread acceptorThread;
-    
-    public final WebMessageRouter messageRouter = new WebMessageRouter();
     
     public Acceptor(Config config)
             throws IOException, ClassNotFoundException {

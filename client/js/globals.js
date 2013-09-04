@@ -50,6 +50,7 @@ var STR = {
     replaceHumanWithRobot: 'Jucătorul {1} a fost înlocuit de robotul {2}.',
     replaceRobotWithHuman: 'Robotul {1} a fost înlocuit de jucătorul {2}.',
     replaceRobotWithRobot: 'Robotul {1} a fost înlocuit de robotul {2}.',
+    hasAttacked: '{1} a atacat plasa „{2}“ a lui {3}.'
 };
 
 // Message IDs. This is populated at start up.

@@ -19,6 +19,7 @@ import ro.minimul.romania1930.web_logic.WebPlayer;
 public class Room {
     private final Game game;
     private Config config;
+    private WebMessageRouter messageRouter;
     private RoomInfo roomInfo;
     private AiContainer aiContainer;
     
@@ -45,9 +46,8 @@ public class Room {
         }
 
         @Override
-        public void attackZone(Zone from, Zone to) {
-            Room.this.attackZone(player, roomInfo.zones[from.id],
-                    roomInfo.zones[to.id]);
+        public void attackZone(OwnedZone from, OwnedZone to) {
+            Room.this.attackZone(player, from, to);
         }
 
         @Override
@@ -63,8 +63,6 @@ public class Room {
         this.game = game;
         
         Acceptor cm = this.game.getConnectionManager();
-        final WebMessageRouter messageRouter
-                = game.getConnectionManager().messageRouter;
         
         cm.setOnAcceptListener(new Acceptor.Listener() {
             @Override
@@ -92,6 +90,7 @@ public class Room {
     public synchronized void open() {
         config = this.game.getConfig();
         roomInfo = new RoomInfo(this.game.getMap(), config);
+        messageRouter = new WebMessageRouter(this);
         aiContainer = new AiContainer(config);
         initializeWithBots();
         aiContainer.start();
@@ -102,6 +101,10 @@ public class Room {
             player.playerEvents.onForcedExit("Going down.");
         }
         aiContainer.stop();
+    }
+    
+    public synchronized RoomInfo getRoomInfo() {
+        return roomInfo;
     }
     
     private synchronized Controls tryToAccept(Connection c) {
