@@ -1,14 +1,13 @@
 package ro.minimul.romania1930.logic;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import ro.minimul.romania1930.comm.msg.PlayerSubMsg;
-import ro.minimul.romania1930.data.Zone;
 
 public abstract class Player<T extends PlayerEvents> {
     public final int id;
     public final boolean isHuman;
-    public final List<Zone> zones = new ArrayList<Zone>();
+    public final Set<OwnedZone> zones = new HashSet<OwnedZone>();
     public final T playerEvents;
     private String name;
     
@@ -33,8 +32,10 @@ public abstract class Player<T extends PlayerEvents> {
     private int[] getZoneIds() {
         int[] ret = new int[zones.size()];
         
-        for (int i = 0; i < ret.length; i++) {
-            ret[i] = zones.get(i).id;
+        int i = 0;
+        for (OwnedZone oz : zones) {
+            ret[i] = oz.zone.id;
+            i++;
         }
         
         return ret;

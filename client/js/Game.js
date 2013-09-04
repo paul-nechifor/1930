@@ -146,7 +146,7 @@ Game.prototype.sendMsg = function (code, msg) {
     this.webSocket.send(String.fromCharCode(code) + JSON.stringify(msg));
 };
 
-Game.prototype.onAttack = function (from, to) {
+Game.prototype.onAttackZone = function (from, to) {
     
 };
 

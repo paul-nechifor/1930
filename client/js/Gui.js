@@ -80,7 +80,7 @@ Gui.prototype.onZoneSelectedForAttack = function (to) {
     var from = this.map.selectedZone;
     this.map.clearSelection();
     
-    this.game.onAttack(from, to);
+    this.game.onAttackZone(from, to);
     
     // Set the to busy while the server responds to the attack request.
     from.isAttackingZone = to;

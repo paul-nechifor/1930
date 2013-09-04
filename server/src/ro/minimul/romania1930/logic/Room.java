@@ -45,11 +45,13 @@ public class Room {
         }
 
         @Override
-        public void attackZone(Zone zone) {
+        public void attackZone(Zone from, Zone to) {
+            Room.this.attackZone(player, roomInfo.zones[from.id],
+                    roomInfo.zones[to.id]);
         }
 
         @Override
-        public void answerQuestion(AttackQuestion question, int answer) {
+        public void answerQuestion(Attack question, int answer) {
         }
 
         @Override
@@ -126,10 +128,6 @@ public class Room {
     }
 
     private synchronized void changeName(Player player, String name) {
-        if (name.equals("Paul")) {
-            return;
-        }
-
         player.setName(name);
 
         for (Player other : roomInfo.players) {
@@ -148,9 +146,18 @@ public class Room {
         }
     }
     
+    private synchronized void attackZone(Player player, OwnedZone from,
+            OwnedZone to) {
+        if (isAttackPossible(player, from, to)) {
+            createAttack(from, to);
+        } else {
+            player.playerEvents.onAttackFailed(from, to);
+        }
+    }
+    
     private void initializeWithBots() {
         int nBots = roomInfo.idUsed.length;
-        int nZones = roomInfo.map.zones.length;
+        int nZones = roomInfo.zones.length;
         int zonesPerBot = nZones / nBots;
         
         List<String> names = Arrays.asList(config.botNames);
@@ -180,7 +187,7 @@ public class Room {
             
             for (int j = 0; j < total; j++) {
                 int zoneId = i * zonesPerBot + j;
-                transferZone(roomInfo.map.zones[zoneId], player);
+                transferZone(roomInfo.zones[zoneId], player);
             }
         }
         
@@ -238,7 +245,8 @@ public class Room {
     }
     
     private void replacePlayers(Player<?> oldOne, Player<?> newOne) {
-        for (Zone zone : oldOne.zones.toArray(new Zone[0])) {
+        OwnedZone[] copy = oldOne.zones.toArray(new OwnedZone[0]);
+        for (OwnedZone zone : copy) {
             transforZone(zone, oldOne, newOne);
         }
         
@@ -256,13 +264,56 @@ public class Room {
         }
     }
     
-    private void transforZone(Zone zone, Player from, Player to) {
+    private void transforZone(OwnedZone zone, Player from, Player to) {
         from.zones.remove(zone);
         transferZone(zone, to);
     }
     
-    private void transferZone(Zone zone, Player to) {
+    private void transferZone(OwnedZone zone, Player to) {
         to.zones.add(zone);
-        roomInfo.zoneOwners[zone.id] = to;
+        zone.owner = to;
+    }
+    
+    private boolean isAttackPossible(Player player, OwnedZone from,
+            OwnedZone to) {
+        if (!player.zones.contains(from)) {
+            // Not your zone.
+            return false;
+        }
+        
+        if (player.zones.contains(to)) {
+            // Cannot attack your own zone.
+            return false;
+        }
+        
+        if (!from.zone.neighborSet.contains(to.zone)) {
+            // The zones aren't neighbours.
+            return false;
+        }
+        
+        if (to.isAttacking != null) {
+            // The zone is attack so it is immune.
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private void createAttack(OwnedZone from, OwnedZone to) {
+        from.isAttacking = to;
+        
+        Attack attack = to.attack;
+        
+        if (attack != null) {
+            attack.otherAggressors.add(from);
+        } else {
+            attack = new Attack(to, from, 60);
+            roomInfo.attacks.add(attack);
+        }
+        
+        // Notify all the players of the attack.
+        for (Player player : roomInfo.players) {
+            player.playerEvents.onAttackZone(from, to);
+        }
     }
 }

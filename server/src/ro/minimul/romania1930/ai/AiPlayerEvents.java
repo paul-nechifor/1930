@@ -1,7 +1,8 @@
 package ro.minimul.romania1930.ai;
 
 import ro.minimul.romania1930.data.Zone;
-import ro.minimul.romania1930.logic.AttackQuestion;
+import ro.minimul.romania1930.logic.Attack;
+import ro.minimul.romania1930.logic.OwnedZone;
 import ro.minimul.romania1930.logic.Player;
 import ro.minimul.romania1930.logic.PlayerControls;
 import ro.minimul.romania1930.logic.PlayerEvents;
@@ -46,33 +47,38 @@ class AiPlayerEvents implements PlayerEvents {
     }
 
     @Override
-    public void onAttackZone(Player player, Zone zone) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void onAttackFailed(OwnedZone from, OwnedZone to) {
+        // TODO
+    }
+    
+    @Override
+    public void onAttackZone(OwnedZone from, OwnedZone to) {
+        // TODO
     }
 
     @Override
-    public void onAttackQuestion(AttackQuestion question) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void onAttackQuestion(Attack question) {
+        // TODO
     }
 
     @Override
     public void onDonatedZones(Player from, Player to, Zone[] zones) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO
     }
 
     @Override
-    public void onAnsweredQuestion(AttackQuestion question, int answer) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void onAnsweredQuestion(Attack question, int answer) {
+        // TODO
     }
 
     @Override
-    public void onQuestionDone(AttackQuestion question, QuestionAnswers answers) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void onQuestionDone(Attack question, QuestionAnswers answers) {
+        // TODO
     }
 
     @Override
     public void onAttackDone() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO
     }
 
     @Override

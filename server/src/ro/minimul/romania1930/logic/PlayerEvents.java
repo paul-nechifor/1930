@@ -10,14 +10,27 @@ public interface PlayerEvents {
      * @param reason 
      */
     public void onForcedExit(String reason);
+    
     public void onEnteredRoom(Player player);
     public void onChangedName(Player player, String name);
     public void onSaid(Player player, String text);
-    public void onAttackZone(Player player, Zone zone);
-    public void onAttackQuestion(AttackQuestion question);
+    
+    /**
+     * Notify the player that the attack he tried to make could not be
+     * performed. This usually would happen if the other zone attacked first
+     * and this player didn't know about it at the time of his attack.
+     * 
+     * @param from
+     * @param to 
+     */
+    public void onAttackFailed(OwnedZone from, OwnedZone to);
+    
+    public void onAttackZone(OwnedZone from, OwnedZone to);
+    
+    public void onAttackQuestion(Attack question);
     public void onDonatedZones(Player from, Player to, Zone[] zones);
-    public void onAnsweredQuestion(AttackQuestion question, int answer);
-    public void onQuestionDone(AttackQuestion question, QuestionAnswers answers);
+    public void onAnsweredQuestion(Attack question, int answer);
+    public void onQuestionDone(Attack question, QuestionAnswers answers);
     public void onAttackDone();
     public void onReplace(Player oldOne, Player newOne);
 }

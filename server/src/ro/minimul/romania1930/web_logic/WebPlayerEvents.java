@@ -1,11 +1,14 @@
 package ro.minimul.romania1930.web_logic;
 
 import ro.minimul.romania1930.comm.Connection;
+import ro.minimul.romania1930.comm.msg.AttackFailedMsg;
+import ro.minimul.romania1930.comm.msg.AttackZoneMsg;
 import ro.minimul.romania1930.comm.msg.PlayerTextMsg;
 import ro.minimul.romania1930.comm.msg.ReplaceMsg;
 import ro.minimul.romania1930.comm.msg.RoomInfoMsg;
 import ro.minimul.romania1930.data.Zone;
-import ro.minimul.romania1930.logic.AttackQuestion;
+import ro.minimul.romania1930.logic.Attack;
+import ro.minimul.romania1930.logic.OwnedZone;
 import ro.minimul.romania1930.logic.Player;
 import ro.minimul.romania1930.logic.PlayerControls;
 import ro.minimul.romania1930.logic.PlayerEvents;
@@ -42,13 +45,19 @@ public class WebPlayerEvents implements PlayerEvents {
     public void onSaid(Player player, String text) {
         connection.sendMessage(new PlayerTextMsg(player.id, text));
     }
-
+    
     @Override
-    public void onAttackZone(Player player, Zone zone) {
+    public void onAttackFailed(OwnedZone from, OwnedZone to) {
+        connection.sendMessage(new AttackFailedMsg(from.zone.id, to.zone.id));
     }
 
     @Override
-    public void onAttackQuestion(AttackQuestion question) {
+    public void onAttackZone(OwnedZone from, OwnedZone to) {
+        connection.sendMessage(new AttackZoneMsg(from.zone.id, to.zone.id));
+    }
+
+    @Override
+    public void onAttackQuestion(Attack question) {
     }
 
     @Override
@@ -56,11 +65,11 @@ public class WebPlayerEvents implements PlayerEvents {
     }
 
     @Override
-    public void onAnsweredQuestion(AttackQuestion question, int answer) {
+    public void onAnsweredQuestion(Attack question, int answer) {
     }
 
     @Override
-    public void onQuestionDone(AttackQuestion question, QuestionAnswers answers) {
+    public void onQuestionDone(Attack question, QuestionAnswers answers) {
     }
 
     @Override
