@@ -79,20 +79,16 @@ Map.prototype.moveCamera = function (mapX, mapY) {
     this.updateCamera();
 };
 
-Map.prototype.addArrow = function (fromZoneId, toZoneId) {
-    var from = this.zones[fromZoneId];
-    var to = this.zones[toZoneId];
-    
+Map.prototype.addArrow = function (from, to) {
     var arrow = new AttackArrow(from, to);
-    from.arrows[toZoneId] = arrow;
+    from.arrows[to.id] = arrow;
     
     arrow.addToDom(this.svgArrows);
 };
 
-Map.prototype.removeArrow = function (fromZoneId, toZoneId) {
-    var from = this.zones[fromZoneId];
-    var arrow = from.arrows[toZoneId];
-    delete from.arrows[toZoneId];
+Map.prototype.removeArrow = function (from, to) {
+    var arrow = from.arrows[to.id];
+    delete from.arrows[to.id];
     arrow.remove();
 };
 
@@ -115,11 +111,13 @@ Map.prototype.clearSelection = function () {
     
     var arrows = this.selectionCleanupArrows;
     if (arrows !== null) {
-        var vals;
+        var vals, from, to;
         for (var i = 0, len = arrows.length; i < len; i++) {
             vals = arrows[i];
-            this.removeArrow(vals[0], vals[1]);
-            this.zones[vals[1]].showName(false);
+            from = vals[0];
+            to = vals[1];
+            this.removeArrow(from, to);
+            to.showName(false);
         }
         this.selectionCleanupArrows = null;
     }
@@ -141,7 +139,7 @@ Map.prototype.showAttackOptions = function (zone) {
         }
         neigh = zones[neighId];
         // You cannot attack an attacker.
-        if (neigh.isAttackingZone !== null) {
+        if (neigh.isAttacking !== null) {
             continue;
         }
         // You cannot attack the same zone with more than one of your zones.
@@ -150,7 +148,7 @@ Map.prototype.showAttackOptions = function (zone) {
         }
         neigh.showName(true, true);
         
-        this.addArrow(zone.id, neighId);
-        this.selectionCleanupArrows.push([zone.id, neighId]);
+        this.addArrow(zone, neigh);
+        this.selectionCleanupArrows.push([zone, neigh]);
     }
 };

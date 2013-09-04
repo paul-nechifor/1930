@@ -9,6 +9,7 @@
         "PlayerTextMsg",
         "ReplaceMsg",
         "AttackZoneMsg",
+        "AttackAcceptedMsg",
         "AttackFailedMsg"
     ],
 
@@ -31,6 +32,7 @@
         "gen.js",
         "globals.js",
         "util.js",
+        "Attack.js",
         "ScrollContainer.js",
         "MessageWindow.js",
         "AbstractTab.js",

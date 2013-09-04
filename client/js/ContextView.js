@@ -74,7 +74,7 @@ ContextView.prototype.showZoneInfo = function (zone) {
     this.addOwnerBar(this.nonScrolling, zone.owner);
     this.addOwnerButton(this.nonScrolling, zone, pc);
     
-    if (zone.isAttackingZone) {
+    if (zone.isAttacking) {
         this.addAttackingState(this.scrolling, zone, pc);
     } else if (zone.owner.id === pc.id) {
         this.addNeighbors(this.scrolling, zone, pc);
@@ -175,7 +175,7 @@ ContextView.prototype.addNeighborAction = function (parent, zone, neighbor,
     
     if (neighbor.owner.id === pc.id) {
         parent.appendChild(document.createTextNode(STR.yours));
-    } else if (neighbor.isAttackingZone !== null) {
+    } else if (neighbor.isAttacking !== null) {
         parent.appendChild(document.createTextNode(STR.cannotBeAttacked));
     } else if (neighbor.isAttackedByPc) {
         parent.appendChild(document.createTextNode(STR.youAreAttackingHim));

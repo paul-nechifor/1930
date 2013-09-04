@@ -1,8 +1,8 @@
 package ro.minimul.romania1930.web_logic;
 
 import ro.minimul.romania1930.comm.Connection;
+import ro.minimul.romania1930.comm.msg.AttackAcceptedMsg;
 import ro.minimul.romania1930.comm.msg.AttackFailedMsg;
-import ro.minimul.romania1930.comm.msg.AttackZoneMsg;
 import ro.minimul.romania1930.comm.msg.PlayerTextMsg;
 import ro.minimul.romania1930.comm.msg.ReplaceMsg;
 import ro.minimul.romania1930.comm.msg.RoomInfoMsg;
@@ -53,7 +53,8 @@ public class WebPlayerEvents implements PlayerEvents {
 
     @Override
     public void onAttackZone(OwnedZone from, OwnedZone to) {
-        connection.sendMessage(new AttackZoneMsg(from.zone.id, to.zone.id));
+        connection.sendMessage(new AttackAcceptedMsg(from.zone.id, to.zone.id,
+                to.attack.secondsToAnswer));
     }
 
     @Override

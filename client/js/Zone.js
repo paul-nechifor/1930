@@ -12,9 +12,8 @@ function Zone(map, id, zoneData, minimapPath) {
     this.nameGroup = null;
     this.neighbours = [];
     
-    this.isAttackingZone = null;
-    this.firstAttackerZone = null;
-    this.otherAttackerZones = null;
+    this.isAttacking = null;
+    this.attack = null;
     this.isAttackedByPc = false;
     
     this.name = this.zoneData.name;

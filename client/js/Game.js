@@ -118,21 +118,24 @@ Game.prototype.onWebSocket_PlayerTextMsg = function (msg) {
     this.gui.messages.add(msg.text, 'msg', from);
 };
 
-Game.prototype.onWebSocket_AttackZoneMsg = function (msg) {
+Game.prototype.onWebSocket_AttackAcceptedMsg = function (msg) {
     var zones = this.gui.map.zones;
     var from = zones[msg.from];
     var to = zones[msg.to];
     
-    var who = from.owner.name;
-    if (from.owner.id === this.pc.id) {
-        who += STR.me;
-    }
+    this.showAttackText(from, to);
     
-    var text = fmt(STR.hasAttacked, from.owner.name, to.name, to.owner.name);
-    this.gui.others.add(text, 'attack');
+    this.setAttack(from, to, msg.s);
 };
 
 Game.prototype.onWebSocket_AttackFailedMsg = function (msg) {
+    var map = this.gui.map;
+    var zones = map.zones;
+    var from = zones[msg.from];
+    var to = zones[msg.to];
+    
+    to.isAttackedByPc = false;
+    map.removeArrow(from, to);
 };
 
 Game.prototype.onWebSocket_ReplaceMsg = function (msg) {
@@ -179,6 +182,14 @@ Game.prototype.sendTextMessage = function (text) {
 
 Game.prototype.onAttackZone = function (from, to) {
     this.sendMsg(MID.AttackZoneMsg, {from: from.id, to: to.id});
+        
+    // This value is set so that this zone is locked until the confirmation
+    // is received from the server (succesful or failed). The values are reset
+    // if it fails.
+    to.isAttackedByPc = true;
+    
+    // The arrow is drawn so that the user knows this was sent.
+    this.gui.map.addArrow(from, to);
 };
 
 Game.prototype.initPlayer = function (playerInfo) {
@@ -200,3 +211,27 @@ Game.prototype.fatalError = function (text) {
     this.gui.self.add(text, 'error');
     this.gui.self.makeActive();
 };
+
+Game.prototype.showAttackText = function (from, to) {
+    var who = from.owner.name;
+    if (from.owner.id === this.pc.id) {
+        who += STR.me;
+    }
+    var text = fmt(STR.hasAttacked, from.owner.name, to.name, to.owner.name);
+    this.gui.others.add(text, 'attack');
+};
+
+Game.prototype.setAttack = function (from, to, secondsToAnswer) {
+    from.isAttacking = to;
+    
+    if (to.attack === null) {
+        to.attack = new Attack(to, from, secondsToAnswer);
+    } else {
+        to.attack.otherAggressors.push(to);
+    }
+    
+    // Add the arrow, except for my attacks which have them already.
+    if (from.id !== this.pc.id) {
+        this.gui.map.addArrow(from, to);
+    }
+}

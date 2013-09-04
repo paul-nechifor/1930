@@ -70,7 +70,7 @@ Gui.prototype.onZoneClicked = function (zone) {
     this.map.clearSelection();
     
     var showAttack = zone.owner.id === this.game.pc.id
-            && zone.isAttackingZone === null;
+            && zone.isAttacking === null;
     
     this.map.setSelectedZone(zone, showAttack);
     this.contextView.showZoneInfo(zone);
@@ -81,15 +81,6 @@ Gui.prototype.onZoneSelectedForAttack = function (to) {
     this.map.clearSelection();
     
     this.game.onAttackZone(from, to);
-    
-    // Set the to busy while the server responds to the attack request.
-    from.isAttackingZone = to;
-    to.firstAttackerZone = from;
-    to.isAttackedByPc = true;
-    
-    // Add the arrow, but it will be removed if the attack happened after
-    // another one.
-    this.map.addArrow(from.id, to.id);
     
     this.contextView.refreshContext();
 };

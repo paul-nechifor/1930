@@ -311,6 +311,7 @@ public class Room {
             attack.otherAggressors.add(from);
         } else {
             attack = new Attack(to, from, 60);
+            to.attack = attack;
             roomInfo.attacks.add(attack);
         }
         
