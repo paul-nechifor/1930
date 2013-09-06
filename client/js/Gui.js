@@ -100,6 +100,18 @@ Gui.prototype.onKeyDown = function (e) {
         if (!this.messages.inputHaveFocus()) {
             this.messages.focusOnInput();
         }
+    } else if (code === 37) { // Left key.
+        this.map.nudgeCamera(-1, 0);
+    } else if (code === 38) { // Up key.
+        this.map.nudgeCamera(0, -1);
+    } else if (code === 39) { // Right key.
+        this.map.nudgeCamera(1, 0);
+    } else if (code === 40) { // Down key.
+        this.map.nudgeCamera(0, 1);
+    } else if (code === 219) { // [
+        this.map.zoomCamera(1);
+    } else if (code === 221) { // ]
+        this.map.zoomCamera(-1);
     }
     
     return true;

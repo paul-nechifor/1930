@@ -22,6 +22,8 @@ var DIMS = {
     arrowHeadOverflow: 30,
     minScrollBarHeight: 20,
     scrollIncrement: 15,
+    nudgeIncrement: 200,
+    cameraZoomValues: [3, 5, 7, 9, 11, 13],
     uiDivideSizes: [400, 150, 600, 200, 800, 250, 1000, 280, 320]
 };
 

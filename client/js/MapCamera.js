@@ -13,11 +13,12 @@ function MapCamera(map) {
     this.canvasW = -1;
     this.canvasH = -1;
     
-    // The center of the screen in map units and the zoom leve. These are the
+    // The center of the screen in map units and the zoom level. These are the
     // ones that should be edited.
     this.focusX = -1;
     this.focusY = -1;
-    this.zoom = 7;
+    this.zoomValue = 7;
+    this.zoomIndex = 2;
 }
 
 MapCamera.prototype.setup = function () {
@@ -32,9 +33,45 @@ MapCamera.prototype.setup = function () {
     this.focusY = this.sizeY / 2;
 };
 
+MapCamera.prototype.zoom = function (direction) {
+    var index = this.zoomIndex + direction;
+    if (index < 0) {
+        return;
+    } else if (index > DIMS.cameraZoomValues.length - 1) {
+        return;
+    }
+    
+    this.zoomIndex = index;
+    this.zoomValue = DIMS.cameraZoomValues[index];
+};
+
+MapCamera.prototype.nudge = function (x, y) {
+    var w2 = this.canvasW / 2;
+    var h2 = this.canvasH / 2;
+    
+    var cx = this.focusX + x;
+    var cy = this.focusY + y;
+    
+    if (cx + w2 > this.sizeX) {
+        this.focusX = this.sizeX - w2;
+    } else if (this.focusX - w2 < 0) {
+        this.focusX = w2;
+    } else {
+        this.focusX = cx;
+    }
+    
+    if (cy + h2 > this.sizeY) {
+        this.focusY = this.sizeY - h2;
+    } else if (this.focusY - h2 < 0) {
+        this.focusY = h2;
+    } else {
+        this.focusY = cy;
+    }
+};
+
 MapCamera.prototype.update = function () {
-    this.canvasW = this.pos.windowWidth * this.zoom;
-    this.canvasH = this.pos.uiDivideY * this.zoom;
+    this.canvasW = this.pos.windowWidth * this.zoomValue;
+    this.canvasH = this.pos.uiDivideY * this.zoomValue;
     
     var w2 = this.canvasW / 2;
     var h2 = this.canvasH / 2;

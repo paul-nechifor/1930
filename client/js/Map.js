@@ -67,15 +67,24 @@ Map.prototype.onResize = function () {
 };
 
 Map.prototype.updateCamera = function () {
-    this.camera.update();
-    
     var c = this.camera;
+    c.update();
     this.gui.onMapUpdate(c.offsetX, c.offsetY, c.canvasW, c.canvasH);
 };
 
 Map.prototype.moveCamera = function (mapX, mapY) {
     this.camera.focusX = mapX;
     this.camera.focusY = mapY;
+    this.updateCamera();
+};
+
+Map.prototype.nudgeCamera = function (x, y) {
+    this.camera.nudge(x * DIMS.nudgeIncrement, y * DIMS.nudgeIncrement);
+    this.updateCamera();
+};
+
+Map.prototype.zoomCamera = function (direction) {
+    this.camera.zoom(direction);
     this.updateCamera();
 };
 
