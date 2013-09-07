@@ -49,7 +49,7 @@ TabbedView.prototype.createTabsElement = function (tabs) {
     for (var i = 0, len = tabs.length; i < len; i++) {
         var li = document.createElement('li');
         ul.appendChild(li);
-        li.appendChild(document.createTextNode(tabs[i].text));
+        addText(li, tabs[i].text);
         this.tabLis.push(li);
         
         li.addEventListener('mousedown', (function (i) {
@@ -63,7 +63,7 @@ TabbedView.prototype.createTabsElement = function (tabs) {
     
     var h1 = document.createElement('h1');
     element.appendChild(h1);
-    h1.appendChild(document.createTextNode(STR.gameTitle));
+    addText(h1, STR.gameTitle);
     
     return element;
 };

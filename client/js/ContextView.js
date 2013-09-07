@@ -70,7 +70,9 @@ ContextView.prototype.showZoneInfo = function (zone) {
     
     var pc = this.gui.game.pc;
     
-    this.addName(this.nonScrolling, zone.name);
+    var title = this.addContextTitle(this.nonScrolling);
+    addText(title, zone.name);
+    
     this.addOwnerBar(this.nonScrolling, zone.owner);
     this.addOwnerButton(this.nonScrolling, zone, pc);
     
@@ -86,7 +88,11 @@ ContextView.prototype.showPlayerInfo = function (player) {
     
     this.displayedPlayer = player;
     
-    this.addName(this.nonScrolling, player.name);
+    var pc = this.gui.game.pc;
+    
+    var title = this.addContextTitle(this.nonScrolling);
+    this.addPlayerNameElement(title, player, pc);
+    
     this.addOwnerBar(this.nonScrolling, player);
     this.addPlayerZones(this.scrolling, player);
 };
@@ -101,13 +107,7 @@ ContextView.prototype.addOwnerBar = function (parent, owner) {
 ContextView.prototype.addOwnerButton = function (parent, zone, pc) {
     var h4 = document.createElement('h4');
     parent.appendChild(h4);
-    h4.appendChild(document.createTextNode(zone.owner.name));
-    
-    if (zone.owner.id === pc.id) {
-        var em = document.createElement('em');
-        h4.appendChild(em);
-        em.appendChild(document.createTextNode(STR.me));
-    }
+    this.addPlayerNameElement(h4, zone.owner, pc);
     
     var that = this;
     h4.addEventListener('click', function () {
@@ -115,10 +115,26 @@ ContextView.prototype.addOwnerButton = function (parent, zone, pc) {
     }, true);
 };
 
-ContextView.prototype.addName = function (parent, name) {
+ContextView.prototype.addPlayerNameElement = function (parent, player, pc) {
+    addText(parent, player.rank + ' ');
+    
+    var name = document.createElement('strong');
+    parent.appendChild(name);
+    addText(name, player.name);
+    
+    var extra = player.id === pc.id || !player.isHuman;
+    if (extra) {
+        var em = document.createElement('em');
+        parent.appendChild(em);
+        var str = (player.id === pc.id) ? STR.me : STR.robot;
+        addText(em, str);
+    }
+};
+
+ContextView.prototype.addContextTitle = function (parent, name) {
     var h3 = document.createElement('h3');
     parent.appendChild(h3);
-    h3.appendChild(document.createTextNode(name));
+    return h3;
 };
 
 ContextView.prototype.createScrollingTable = function (parent) {
@@ -166,7 +182,7 @@ ContextView.prototype.addNeighborName = function (parent, neighbor) {
     var color = document.createElement('div');
     parent.appendChild(color);
     color.style.backgroundColor = COLORS.zoneFills[neighbor.owner.id];
-    parent.appendChild(document.createTextNode(neighbor.name));
+    addText(parent, neighbor.name);
 }
 
 ContextView.prototype.addNeighborAction = function (parent, zone, neighbor,
@@ -174,15 +190,15 @@ ContextView.prototype.addNeighborAction = function (parent, zone, neighbor,
     parent.setAttribute('class', 'action');
     
     if (neighbor.owner.id === pc.id) {
-        parent.appendChild(document.createTextNode(STR.yours));
+        addText(parent, STR.yours);
     } else if (neighbor.isAttacking !== null) {
-        parent.appendChild(document.createTextNode(STR.cannotBeAttacked));
+        addText(parent, STR.cannotBeAttacked);
     } else if (neighbor.isAttackedByPc) {
-        parent.appendChild(document.createTextNode(STR.youAreAttackingHim));
+        addText(parent, STR.youAreAttackingHim);
     } else {
         var span = document.createElement('span');
         parent.appendChild(span);
-        span.appendChild(document.createTextNode(STR.attack));
+        addText(span, STR.attack);
         var that = this;
         span.addEventListener('click', function () {
             that.gui.onZoneSelectedForAttack(neighbor);
@@ -208,8 +224,7 @@ ContextView.prototype.addPlayerZone = function (parent, zone) {
     
     var name = document.createElement('td');
     tr.appendChild(name);
-    
-    name.appendChild(document.createTextNode(zone.name));
+    addText(name, zone.name);
     
     var that = this;
     name.addEventListener('click', function () {

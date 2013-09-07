@@ -52,7 +52,20 @@ var STR = {
     replaceHumanWithRobot: 'Jucătorul {1} a fost înlocuit de robotul {2}.',
     replaceRobotWithHuman: 'Robotul {1} a fost înlocuit de jucătorul {2}.',
     replaceRobotWithRobot: 'Robotul {1} a fost înlocuit de robotul {2}.',
-    hasAttacked: '{1} a atacat plasa „{2}“ a lui {3}.'
+    hasAttacked: '{1} a atacat plasa „{2}“ a lui {3}.',
+    ranks: [
+        1, 'soldat',
+        5, 'caporal',
+        10, 'sergent',
+        15, 'plutonier',
+        20, 'maistru',
+        30, 'locotenent',
+        50, 'căpitan',
+        80, 'maior',
+        100, 'colonel',
+        150, 'general',
+        'mareșal'
+    ]
 };
 
 // Message IDs. This is populated at start up.

@@ -7,6 +7,10 @@ function createGuiElement(id) {
     return element;
 }
 
+function addText(elem, text) {
+    elem.appendChild(document.createTextNode(text));
+}
+
 function svgCreate(parent, type, props) {
     var element = document.createElementNS(SVGNS, type);
     parent.appendChild(element);
@@ -35,7 +39,7 @@ function createClassedSpan(parent, cls, text) {
     var span = document.createElement('span')
     parent.appendChild(span);
     span.setAttribute('class', cls);
-    span.appendChild(document.createTextNode(text));
+    addText(span, text);
     return span;
 }
 
@@ -79,6 +83,16 @@ function hsvToRgbHex(h, s, v) {
 function chooseSize(size, array) {
     for (var i = 0, len = array.length; i < len; i += 2) {
         if (size < array[i]) {
+            return array[i + 1];
+        }
+    }
+    
+    return array[array.length - 1];
+}
+
+function chooseValue(size, array) {
+    for (var i = 0, len = array.length; i < len; i += 2) {
+        if (size <= array[i]) {
             return array[i + 1];
         }
     }

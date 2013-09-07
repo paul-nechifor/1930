@@ -59,23 +59,10 @@ Game.prototype.setPc = function (pc) {
     // Replacing the color for the current player.
     changePcColors(this.pc.id);
     
+    // Setting the same owner again in order to refresh the color.
     for (var key in this.pc.zones) {
         this.pc.zones[key].setNewOwner(this.pc);
     }
-};
-
-Game.prototype.giveZone = function (playerId, zoneId) {
-    var player = this.players[playerId];
-    
-    var zone = this.gui.map.zones[zoneId];
-    var prevOwner = zone.owner;
-    
-    if (prevOwner !== null) {
-        delete prevOwner.zones[zoneId];
-    }
-    
-    zone.setNewOwner(player);
-    player.zones[zoneId] = zone;
 };
 
 Game.prototype.onWebSocketClose = function () {
@@ -198,10 +185,11 @@ Game.prototype.initPlayer = function (playerInfo) {
         isHuman: playerInfo.isHuman,
         name: playerInfo.name
     });
-
     this.players[player.id] = player;
+    
+    var zones = this.gui.map.zones;
     for (var k = 0; k < playerInfo.zones.length; k++) {
-        this.giveZone(player.id, playerInfo.zones[k]);
+        player.addZone(zones[playerInfo.zones[k]]);
     }
     
     return player;

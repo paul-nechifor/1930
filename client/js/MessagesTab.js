@@ -38,7 +38,7 @@ MessagesTab.prototype.getElementFor = function (text, type, from) {
     e.setAttribute('class', type);
     if (from !== undefined) {
         createClassedSpan(e, 'from', from);
-        e.appendChild(document.createTextNode(': '));
+        addText(e, ': ');
     }
     createClassedSpan(e, 'text', text);
     return e;

@@ -103,7 +103,7 @@ Zone.prototype.showName = function (show, showAttack) {
         'fill': COLORS.zoneNameFontColor,
         'text-anchor': 'middle'
     });
-    text.appendChild(document.createTextNode(this.uName));
+    addText(text, this.uName);
     
     if (showAttack) {
         text.setAttribute('style', 'cursor:crosshair');
