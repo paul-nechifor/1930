@@ -76,7 +76,13 @@ ContextView.prototype.showZoneInfo = function (zone) {
     this.addOwnerBar(this.nonScrolling, zone.owner);
     this.addOwnerButton(this.nonScrolling, zone, pc);
     
-    if (zone.isAttacking) {
+    if (zone.blockedForConfirmation) {
+        return;
+    }
+    
+    var isInAttack = zone.isAttacking !== null || zone.attack !== null;
+    
+    if (isInAttack) {
         this.addAttackingState(this.scrolling, zone, pc);
     } else if (zone.owner.id === pc.id) {
         this.addNeighbors(this.scrolling, zone, pc);

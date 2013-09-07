@@ -110,6 +110,9 @@ Game.prototype.onWebSocket_AttackAcceptedMsg = function (msg) {
     var from = zones[msg.from];
     var to = zones[msg.to];
     
+    to.blockedForConfirmation = false;
+    from.blockedForConfirmation = false;
+    
     this.showAttackText(from, to);
     
     this.setAttack(from, to, msg.s);
@@ -122,6 +125,8 @@ Game.prototype.onWebSocket_AttackFailedMsg = function (msg) {
     var to = zones[msg.to];
     
     to.isAttackedByPc = false;
+    to.blockedForConfirmation = false;
+    from.blockedForConfirmation = false;
     map.removeArrow(from, to);
 };
 
@@ -169,11 +174,10 @@ Game.prototype.sendTextMessage = function (text) {
 
 Game.prototype.onAttackZone = function (from, to) {
     this.sendMsg(MID.AttackZoneMsg, {from: from.id, to: to.id});
-        
-    // This value is set so that this zone is locked until the confirmation
-    // is received from the server (succesful or failed). The values are reset
-    // if it fails.
+    
     to.isAttackedByPc = true;
+    to.blockedForConfirmation = true;
+    from.blockedForConfirmation = true;
     
     // The arrow is drawn so that the user knows this was sent.
     this.gui.map.addArrow(from, to);
@@ -218,8 +222,16 @@ Game.prototype.setAttack = function (from, to, secondsToAnswer) {
         to.attack.otherAggressors.push(to);
     }
     
+    var pcId = this.pc.id;
+    var fromOwnerId = from.owner.id;
+    var toOwnerId = to.owner.id;
+    
     // Add the arrow, except for my attacks which have them already.
-    if (from.id !== this.pc.id) {
+    if (fromOwnerId !== pcId) {
         this.gui.map.addArrow(from, to);
+    }
+    
+    if (fromOwnerId === pcId || toOwnerId === pcId) {
+        this.gui.topView.addInvolvedAttack(to.attack);
     }
 }

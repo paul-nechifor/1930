@@ -15,6 +15,9 @@ function Zone(map, id, zoneData, minimapPath) {
     this.isAttacking = null;
     this.attack = null;
     this.isAttackedByPc = false;
+    // This used to block attacking while waiting for the proper attack to
+    // be authorized by the server.
+    this.blockedForConfirmation = false;
     
     this.name = this.zoneData.name;
     if (this.zoneData.county !== undefined) {

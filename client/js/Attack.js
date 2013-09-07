@@ -2,6 +2,6 @@
 function Attack(victim, firstAggressor, secondsToAnswer) {
     this.victim = victim;
     this.firstAggressor = firstAggressor;
-    this.secondsToAnswer = secondsToAnswer;
     this.otherAggressors = [];
+    this.deadline = Date.now() + secondsToAnswer * 1000;
 }
