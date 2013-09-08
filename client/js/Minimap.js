@@ -32,6 +32,7 @@ Minimap.prototype.onResize = function () {
     var pos = this.gui.positions;
     this.svg.setAttribute('width', pos.minimapWidth);
     this.svg.setAttribute('height', pos.uiDivideSize);
+    this.svg.parentElement.style.height = pos.uiDivideSize + 'px';
 };
 
 Minimap.prototype.setupDrawData = function () {

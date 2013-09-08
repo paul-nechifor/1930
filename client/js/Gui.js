@@ -7,6 +7,7 @@ function Gui(game) {
     this.minimap = null;
     this.map = null
     this.topView = null;
+    this.attackView = null;
     this.contextView = null;
     this.tabbedView = null;
     this.messages = null;
@@ -23,6 +24,8 @@ Gui.prototype.setup = function () {
     this.map.setup();
     this.topView = new TopView(this);
     this.topView.setup();
+    this.attackView = new AttackView(this);
+    this.attackView.setup();
     
     this.contextView = new ContextView(this);
     this.contextView.setup();
@@ -53,6 +56,7 @@ Gui.prototype.setupSize = function () {
         that.minimap.onResize();
         that.map.onResize();
         that.topView.onResize();
+        that.attackView.onResize();
         that.contextView.onResize();
         that.tabbedView.onResize();
     };

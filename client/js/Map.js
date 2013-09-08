@@ -17,16 +17,12 @@ Map.prototype.setup = function () {
     var element = createGuiElement('map');
     element.setAttribute('class', 'unselectable');
     
-    var pos = this.gui.positions;
-    
-    this.svg = svgCreate(element, 'svg', {
-        width: pos.windowWidth,
-        height: pos.uiDivideY
-    });
+    this.svg = svgCreate(element, 'svg', {});
     
     this.setupZones();
     this.camera.setup();
-    this.updateCamera();
+    
+    this.onResize();
 };
 
 Map.prototype.setupZones = function () {
@@ -62,6 +58,7 @@ Map.prototype.onResize = function () {
     
     this.svg.setAttribute('width', pos.windowWidth);
     this.svg.setAttribute('height', pos.uiDivideY);
+    this.svg.parentElement.style.height = pos.uiDivideY + 'px';
     
     this.updateCamera();
 };

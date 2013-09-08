@@ -239,7 +239,6 @@ Game.prototype.setAttack = function (from, to, secondsToAnswer) {
         to.attack.otherAggressors.push(to);
     }
     
-    console.log(to.attack);
     from.owner.addAttacking(to.attack);
     to.owner.addBeingAttacked(to.attack);
     

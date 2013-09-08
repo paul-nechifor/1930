@@ -13,6 +13,8 @@ function Positions(data) {
     this.minimapWidth = -1;
     this.tabbedViewWidth = -1;
     this.tabsHeight = -1;
+    this.attackViewTop = -1;
+    this.attackViewHeight = -1;
     
     this.mapRatio = data.size[0] / data.size[1];
 }
@@ -25,4 +27,7 @@ Positions.prototype.realign = function (windowWidth, windowHeight) {
     this.minimapWidth = (this.uiDivideSize * this.mapRatio) | 0;
     this.tabbedViewWidth = windowWidth - this.minimapWidth - this.contextWidth;
     this.tabsHeight = this.uiDivideSize - 20;
+    this.attackViewTop = this.topViewContentHeight + 2 * this.topViewPadding;
+    this.attackViewHeight = windowHeight - this.attackViewTop
+            - this.uiDivideSize;
 }
