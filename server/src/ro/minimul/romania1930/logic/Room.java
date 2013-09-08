@@ -12,6 +12,7 @@ import ro.minimul.romania1930.comm.Connection;
 import ro.minimul.romania1930.comm.Message;
 import ro.minimul.romania1930.comm.msg.RoomInfoMsg;
 import ro.minimul.romania1930.data.Config;
+import ro.minimul.romania1930.data.QuestionSet;
 import ro.minimul.romania1930.data.Zone;
 import ro.minimul.romania1930.web_logic.WebMessageRouter;
 import ro.minimul.romania1930.web_logic.WebPlayer;
@@ -19,6 +20,7 @@ import ro.minimul.romania1930.web_logic.WebPlayer;
 public class Room {
     private final Game game;
     private Config config;
+    private QuestionSet questionSet;
     private WebMessageRouter messageRouter;
     private RoomInfo roomInfo;
     private AiContainer aiContainer;
@@ -89,6 +91,7 @@ public class Room {
     
     public synchronized void open() {
         config = this.game.getConfig();
+        questionSet = this.game.getQuestionSet();
         roomInfo = new RoomInfo(this.game.getMap(), config);
         messageRouter = new WebMessageRouter(this);
         aiContainer = new AiContainer(config);
@@ -290,7 +293,7 @@ public class Room {
         }
         
         if (!from.zone.neighborSet.contains(to.zone)) {
-            // The zones aren't neighbours.
+            // The zones aren't neighbors.
             return false;
         }
         
@@ -334,7 +337,8 @@ public class Room {
         if (attack != null) {
             attack.otherAggressors.add(from);
         } else {
-            attack = new Attack(to, from, 60);
+            attack = new Attack(to, from, 60, questionSet.getRandomFaQuestion(),
+                    questionSet.getRandomNaQuestion());
             to.attack = attack;
             roomInfo.attacks.add(attack);
         }

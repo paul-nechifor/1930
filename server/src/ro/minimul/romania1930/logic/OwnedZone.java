@@ -4,7 +4,7 @@ import ro.minimul.romania1930.data.Zone;
 
 public class OwnedZone {
     public final Zone zone;
-    public final OwnedZone[] neighbours;
+    public final OwnedZone[] neighbors;
     public OwnedZone isAttacking = null;
     public Player owner = null;
     
@@ -13,12 +13,12 @@ public class OwnedZone {
     
     OwnedZone(Zone zone) {
         this.zone = zone;
-        this.neighbours = new OwnedZone[this.zone.neighbours.length];
+        this.neighbors = new OwnedZone[this.zone.neighbors.length];
     }
     
-    void setYourNeighbours(OwnedZone zones[]) {
-        for (int i = 0; i < zone.neighbours.length; i++) {
-            neighbours[i] = zones[zone.neighbours[i].id];
+    void setYourNeighbors(OwnedZone zones[]) {
+        for (int i = 0; i < zone.neighbors.length; i++) {
+            neighbors[i] = zones[zone.neighbors[i].id];
         }
     }
 }

@@ -162,9 +162,9 @@ ContextView.prototype.addAttackingState = function (parent, zone, pc) {
 ContextView.prototype.addNeighbors = function (parent, zone, pc) {
     var table = this.createScrollingTable(parent);
     
-    var neighbours = zone.neighbours;
-    for (var i = 0, len = neighbours.length; i < len; i++) {
-        this.addNeighbor(table, zone, neighbours[i], pc);
+    var neighbors = zone.neighbors;
+    for (var i = 0, len = neighbors.length; i < len; i++) {
+        this.addNeighbor(table, zone, neighbors[i], pc);
     }
     
     this.activeSc.innerChanged();

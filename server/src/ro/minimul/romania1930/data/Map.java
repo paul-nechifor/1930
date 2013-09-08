@@ -24,7 +24,7 @@ public class Map {
         }
         
         for (int i = 0; i < zones.length; i++) {
-            zones[i].fillNeighbours(mapJson.zones[i].neighs);
+            zones[i].fillNeighbors(mapJson.zones[i].neighs);
         }
         
         return map;

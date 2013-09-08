@@ -42,11 +42,11 @@ Map.prototype.setupZones = function () {
     }
     
     // Adding object references for each neighbor.
-    var j, lenJ, neighbourIds;
+    var j, lenJ, neighborIds;
     for (i = 0; i < lenI; i++) {
-        neighbourIds = zoneDatas[i].neighs;
-        for (j = 0, lenJ = neighbourIds.length; j < lenJ; j++) {
-            this.zones[i].neighbours.push(this.zones[neighbourIds[j]]);
+        neighborIds = zoneDatas[i].neighs;
+        for (j = 0, lenJ = neighborIds.length; j < lenJ; j++) {
+            this.zones[i].neighbors.push(this.zones[neighborIds[j]]);
         }
     }
     

@@ -41,12 +41,12 @@ public abstract class Player<T extends PlayerEvents> {
         return ret;
     }
     
-    public Set<OwnedZone> getAttackableNeighbours() {
+    public Set<OwnedZone> getAttackableNeighbors() {
         final Set<OwnedZone> ret = new HashSet<OwnedZone>();
         
         for (OwnedZone my : zones) {
             skipZone:
-            for (OwnedZone neigh : my.neighbours) {
+            for (OwnedZone neigh : my.neighbors) {
                 // Not my zones, or duplicate zones.
                 if (zones.contains(neigh) || ret.contains(neigh)) {
                     continue skipZone;

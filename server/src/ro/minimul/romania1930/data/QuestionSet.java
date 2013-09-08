@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 import ro.minimul.romania1930.util.Util;
 
 public class QuestionSet {
-    public final FaQuestion[] faQuestions;
-    public final NaQuestion[] naQuestions;
+    private final FaQuestion[] faQuestions;
+    private final NaQuestion[] naQuestions;
     
     private QuestionSet(FaQuestion[] faQuestions, NaQuestion[] naQuestions) {
         this.faQuestions = faQuestions;
@@ -21,5 +21,13 @@ public class QuestionSet {
         NaQuestion[] naQuestions = NaQuestion.loadNaQuestions(naFile);
         
         return new QuestionSet(faQuestions, naQuestions);
+    }
+    
+    public FaQuestion getRandomFaQuestion() {
+        return faQuestions[(int)(Math.random() * faQuestions.length)];
+    }
+    
+    public NaQuestion getRandomNaQuestion() {
+        return naQuestions[(int)(Math.random() * naQuestions.length)];
     }
 }

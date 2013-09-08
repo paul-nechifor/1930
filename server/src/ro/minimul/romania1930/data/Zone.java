@@ -6,19 +6,19 @@ import java.util.Set;
 public class Zone {
     public final int id;
     public final Map map;
-    public final Zone[] neighbours;
+    public final Zone[] neighbors;
     public final Set<Zone> neighborSet = new HashSet<Zone>();
     
-    Zone(Map map, int id, int nNeighbours) {
+    Zone(Map map, int id, int nNeighbors) {
         this.map = map;
         this.id = id;
-        this.neighbours = new Zone[nNeighbours];
+        this.neighbors = new Zone[nNeighbors];
     }
     
-    void fillNeighbours(int[] ids) {
-        for (int i = 0; i < neighbours.length; i++) {
-            neighbours[i] = map.zones[ids[i]];
-            neighborSet.add(neighbours[i]);
+    void fillNeighbors(int[] ids) {
+        for (int i = 0; i < neighbors.length; i++) {
+            neighbors[i] = map.zones[ids[i]];
+            neighborSet.add(neighbors[i]);
         }
     }
 }

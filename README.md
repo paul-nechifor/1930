@@ -69,7 +69,7 @@ Data files
 ### Map
 
 The map data is in `data/map.json`. This includes the SVG paths for the
-territories, their neighbours, names, etc.
+territories, their neighbors, names, etc.
 
 I'll probably add other countries (real or otherwise) in the future.
 

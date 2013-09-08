@@ -10,7 +10,7 @@ function Zone(map, id, zoneData, minimapPath) {
     this.path = null;
     this.centerCircle = null;
     this.nameGroup = null;
-    this.neighbours = [];
+    this.neighbors = [];
     
     this.isAttacking = null;
     this.attack = null;

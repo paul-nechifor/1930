@@ -100,7 +100,7 @@ class AiPlayerEvents implements PlayerEvents {
     }
         
     private void tryToAttack() {
-        Set<OwnedZone> attackable = self.getAttackableNeighbours();
+        Set<OwnedZone> attackable = self.getAttackableNeighbors();
         if (attackable.isEmpty()) {
             return;
         }
@@ -108,7 +108,7 @@ class AiPlayerEvents implements PlayerEvents {
         OwnedZone picked = Util.chooseRandom(attackable);
         
         Set<OwnedZone> froms = new HashSet<OwnedZone>();
-        for (OwnedZone z : picked.neighbours) {
+        for (OwnedZone z : picked.neighbors) {
             if (self.zones.contains(z)) {
                 froms.add(z);
             }
