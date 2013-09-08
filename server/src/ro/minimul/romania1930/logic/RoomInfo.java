@@ -20,5 +20,9 @@ public class RoomInfo {
         for (int i = 0; i < zones.length; i++) {
             zones[i] = new OwnedZone(this.map.zones[i]);
         }
+        
+        for (int i = 0; i < zones.length; i++) {
+            zones[i].setYourNeighbours(zones);
+        }
     }
 }

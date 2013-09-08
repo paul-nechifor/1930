@@ -135,7 +135,8 @@ Map.prototype.clearSelection = function () {
 Map.prototype.showAttackOptions = function (zone) {
     var neighIds = zone.zoneData.neighs;
     var zones = this.zones;
-    var ownerZones = zone.owner.zones;
+    var owner = zone.owner;
+    var ownerZones = owner.zones;
     var neighId, neigh;
     
     this.selectionCleanupArrows = [];
@@ -151,8 +152,12 @@ Map.prototype.showAttackOptions = function (zone) {
         if (neigh.isAttacking !== null) {
             continue;
         }
+        // You cannot attack this zone if it is pending.
+        if (neigh.blockedForConfirmation) {
+            continue;
+        }
         // You cannot attack the same zone with more than one of your zones.
-        if (neigh.isAttackedByPc) {
+        if (owner.attackedZones[neigh.id]) {
             continue;
         }
         neigh.showName(true, true);

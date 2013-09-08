@@ -32,9 +32,9 @@ var VALS = {
 
 var STR = {
     gameTitle: 'România 1930',
-    yours: '(al tău)',
-    cannotBeAttacked: '(imun)',
-    youAreAttackingHim: '(îl ataci)',
+    yours: '(a ta)',
+    cannotBeAttacked: '(imună)',
+    youAreAttackingHim: '(o ataci)',
     attack: 'Atacă!',
     connectionClosed: 'S-a închis conexiunea.',
     connectionError: 'Eroare de conexiune.',

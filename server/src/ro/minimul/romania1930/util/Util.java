@@ -3,6 +3,7 @@ package ro.minimul.romania1930.util;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Set;
 
 public class Util {
     public static final File JAR_LOCATION =
@@ -28,5 +29,19 @@ public class Util {
     
     public static File getJarRelative(String path) {
         return new File(JAR_LOCATION, path);
+    }
+    
+    public static <E> E chooseRandom(Set<E> set) {
+        int picked = (int) (set.size() * Math.random());
+        int i = 0;
+        
+        for (E e : set) {
+            if (i == picked) {
+                return e;
+            }
+            i++;
+        }
+        
+        return null;
     }
 }

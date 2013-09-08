@@ -70,7 +70,9 @@ Gui.prototype.onZoneClicked = function (zone) {
     this.map.clearSelection();
     
     var showAttack = zone.owner.id === this.game.pc.id
-            && zone.isAttacking === null;
+            && zone.isAttacking === null
+            && zone.attack === null
+            && !zone.blockedForConfirmation;
     
     this.map.setSelectedZone(zone, showAttack);
     this.contextView.showZoneInfo(zone);

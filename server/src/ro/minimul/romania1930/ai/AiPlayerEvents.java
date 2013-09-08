@@ -1,5 +1,7 @@
 package ro.minimul.romania1930.ai;
 
+import java.util.HashSet;
+import java.util.Set;
 import ro.minimul.romania1930.data.Zone;
 import ro.minimul.romania1930.logic.Attack;
 import ro.minimul.romania1930.logic.OwnedZone;
@@ -8,8 +10,13 @@ import ro.minimul.romania1930.logic.PlayerControls;
 import ro.minimul.romania1930.logic.PlayerEvents;
 import ro.minimul.romania1930.logic.QuestionAnswers;
 import ro.minimul.romania1930.logic.RoomInfo;
+import ro.minimul.romania1930.util.Timer;
+import ro.minimul.romania1930.util.Util;
 
 class AiPlayerEvents implements PlayerEvents {
+    private final static long NANO = 1000000000;
+    private final Timer tryToAttack = new Timer(20 * NANO);
+    
     private Player self;
     private PlayerControls controls;
     private RoomInfo roomInfo;
@@ -84,5 +91,30 @@ class AiPlayerEvents implements PlayerEvents {
     @Override
     public void onReplace(Player oldOne, Player newOne) {
         // Not interested.
+    }
+    
+    public void tick(long passed) {
+        if (tryToAttack.triggered(passed)) {
+            tryToAttack();
+        }
+    }
+        
+    private void tryToAttack() {
+        Set<OwnedZone> attackable = self.getAttackableNeighbours();
+        if (attackable.isEmpty()) {
+            return;
+        }
+        
+        OwnedZone picked = Util.chooseRandom(attackable);
+        
+        Set<OwnedZone> froms = new HashSet<OwnedZone>();
+        for (OwnedZone z : picked.neighbours) {
+            if (self.zones.contains(z)) {
+                froms.add(z);
+            }
+        }
+        OwnedZone from = Util.chooseRandom(froms);
+        
+        controls.attackZone(from, picked);
     }
 }

@@ -199,7 +199,7 @@ ContextView.prototype.addNeighborAction = function (parent, zone, neighbor,
         addText(parent, STR.yours);
     } else if (neighbor.isAttacking !== null) {
         addText(parent, STR.cannotBeAttacked);
-    } else if (neighbor.isAttackedByPc) {
+    } else if (pc.attackedZones[neighbor.id]) {
         addText(parent, STR.youAreAttackingHim);
     } else {
         var span = document.createElement('span');

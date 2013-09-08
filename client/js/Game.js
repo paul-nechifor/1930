@@ -79,14 +79,8 @@ Game.prototype.onWebSocket_RoomInfoMsg = function (roomInfo) {
         return;
     }
     
-    var playerInfos = roomInfo.players;
-    
-    for (var i = 0, len = playerInfos.length; i < len; i++) {
-        this.initPlayer(playerInfos[i]);
-    }
-    
-    var self = this.initPlayer(roomInfo.self);
-    this.setPc(self);
+    this.initPlayers(roomInfo.players, roomInfo.self);
+    this.initAttacks(roomInfo.attacks);
     
     this.gui.self.add(STR.gameStarted, 'info');
 };
@@ -124,7 +118,6 @@ Game.prototype.onWebSocket_AttackFailedMsg = function (msg) {
     var from = zones[msg.from];
     var to = zones[msg.to];
     
-    to.isAttackedByPc = false;
     to.blockedForConfirmation = false;
     from.blockedForConfirmation = false;
     map.removeArrow(from, to);
@@ -175,12 +168,20 @@ Game.prototype.sendTextMessage = function (text) {
 Game.prototype.onAttackZone = function (from, to) {
     this.sendMsg(MID.AttackZoneMsg, {from: from.id, to: to.id});
     
-    to.isAttackedByPc = true;
     to.blockedForConfirmation = true;
     from.blockedForConfirmation = true;
     
     // The arrow is drawn so that the user knows this was sent.
     this.gui.map.addArrow(from, to);
+};
+
+Game.prototype.initPlayers = function (playerInfos, self) {
+    for (var i = 0, len = playerInfos.length; i < len; i++) {
+        this.initPlayer(playerInfos[i]);
+    }
+    
+    var pc = this.initPlayer(self);
+    this.setPc(pc);
 };
 
 Game.prototype.initPlayer = function (playerInfo) {
@@ -197,6 +198,22 @@ Game.prototype.initPlayer = function (playerInfo) {
     }
     
     return player;
+};
+
+Game.prototype.initAttacks = function (attacks) {
+    var zones = this.gui.map.zones;
+    var i, j, lenI, lenJ, attack, froms, to, s;
+    
+    for (i = 0, lenI = attacks.length; i < lenI; i++) {
+        attack = attacks[i];
+        froms = attack.froms;
+        to = zones[attack.to];
+        s = attack.s / 1000.0;
+        s = 60; // FIXME This needs to be removed.
+        for (j = 0, lenJ = froms.length; j < lenJ; j++) {
+            this.setAttack(zones[froms[j]], to, s);
+        }
+    }
 };
 
 Game.prototype.fatalError = function (text) {
@@ -221,6 +238,10 @@ Game.prototype.setAttack = function (from, to, secondsToAnswer) {
     } else {
         to.attack.otherAggressors.push(to);
     }
+    
+    console.log(to.attack);
+    from.owner.addAttacking(to.attack);
+    to.owner.addBeingAttacked(to.attack);
     
     var pcId = this.pc.id;
     var fromOwnerId = from.owner.id;

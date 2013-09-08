@@ -16,29 +16,39 @@ class AiThread extends Thread {
     @Override 
     public void run() {
         keepRunning = true;
+        long lastTime = System.nanoTime();
+        long now, passed;
+        Iterator<AiPlayer> iterator;
         
         while (keepRunning) {
+            try {
+                Thread.sleep(aiTick);
+            } catch (InterruptedException ex) {
+            }
+            
+            now = System.nanoTime();
+            passed = now - lastTime;
+            lastTime = now;
+            
             synchronized (this) {
                 // Using the iterator because elements might be removed.
-                Iterator<AiPlayer> iterator = aiPlayers.iterator();
-                double time = System.nanoTime() / 1E9;
+                iterator = aiPlayers.iterator();
                 while (iterator.hasNext()) {
                     AiPlayer aiPlayer = iterator.next();
                     try {
-                        aiPlayer.tick(time);
+                        aiPlayer.playerEvents.tick(passed);
                     } catch (Exception ex) {
                         if (keepRunning) {
+                            ex.printStackTrace();
+                            ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                            // TODO: This doesn't work right. If the player
+                            // is kicked the iterator will have a concurent XXX
                             aiPlayer.playerEvents.codeFailure();
                         } else {
                             return;
                         }
                     }
                 }
-            }
-            
-            try {
-                Thread.sleep(aiTick);
-            } catch (InterruptedException ex) {
             }
         }
     }

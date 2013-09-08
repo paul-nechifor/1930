@@ -299,6 +299,30 @@ public class Room {
             return false;
         }
         
+        if (from.isAttacking != null) {
+            // You cannot attack multiple zones from the same zone.
+            return false;
+        }
+        
+        if (from.attack != null) {
+            // You cannot attack from an attacked zone.
+            return false;
+        }
+        
+        Attack attack = to.attack;
+        if (attack != null) {
+            if (player.zones.contains(attack.firstAggressor)) {
+                // You cannot attack the same zone from more than one place.
+                return false;
+            }
+            for (OwnedZone z : attack.otherAggressors) {
+                if (player.zones.contains(z)) {
+                    // You cannot attack the same zone from more than one place.
+                    return false;
+                }
+            }
+        }
+        
         return true;
     }
     

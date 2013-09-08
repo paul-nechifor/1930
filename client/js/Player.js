@@ -3,9 +3,11 @@ function Player(opts) {
     this.id = opts.id;
     this.name = opts.name;
     this.isHuman = opts.isHuman;
+    
     this.zones = {};
     this.nZones = 0;
     this.rank = null;
+    this.attackedZones = {};
 }
 
 // This both adds the zone to this player and removes it from the previous owner
@@ -27,4 +29,12 @@ Player.prototype.removeZone = function (zone) {
     this.nZones--;
     delete this.zones[zone.id];
     this.rank = chooseValue(this.nZones, STR.ranks);
+};
+
+Player.prototype.addAttacking = function (attack) {
+    this.attackedZones[attack.victim.id] = true;
+};
+
+Player.prototype.addBeingAttacked = function (attack) {
+    // TODO
 };
