@@ -26,6 +26,7 @@ Gui.prototype.setup = function () {
     this.topView.setup();
     this.attackView = new AttackView(this);
     this.attackView.setup();
+    this.attackView.open();
     
     this.contextView = new ContextView(this);
     this.contextView.setup();

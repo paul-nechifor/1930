@@ -168,21 +168,33 @@ body {
     position: fixed;
     left: 0;
     background-color: rgba(0, 0, 0, 0.7);
+    cursor: default;
 }
 
 #attack-view .close-btn {
     position: absolute;
     top: 0;
     right: 0;
-    width: 30px;
-    height: 30px;
     background-color: #222;
     color: #FFF;
-    font-size: 30px;
     text-align: center;
     border-left: 1px solid #888;
     border-bottom: 1px solid #888;
     cursor: pointer;
+}
+
+#attack-view .question {
+    line-height: 1.4;
+}
+
+#attack-view .answers {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+#attack-view .answers table {
+    
 }
 
 #top-view {

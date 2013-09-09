@@ -15,6 +15,8 @@ function Positions(data) {
     this.tabsHeight = -1;
     this.attackViewTop = -1;
     this.attackViewHeight = -1;
+    this.attackViewPadding = -1;
+    this.attackViewBigText = -1;
     
     this.mapRatio = data.size[0] / data.size[1];
 }
@@ -30,4 +32,6 @@ Positions.prototype.realign = function (windowWidth, windowHeight) {
     this.attackViewTop = this.topViewContentHeight + 2 * this.topViewPadding;
     this.attackViewHeight = windowHeight - this.attackViewTop
             - this.uiDivideSize;
+    this.attackViewPadding = chooseSize(windowHeight, DIMS.attackViewPaddings);
+    this.attackViewBigText = chooseSize(windowHeight, DIMS.attackViewBigTexts);
 }
