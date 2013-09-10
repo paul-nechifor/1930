@@ -48,6 +48,7 @@
         "Map.js",
         "ContextView.js",
         "AttackTimer.js",
+        "AnswerView.js",
         "AttackView.js",
         "TopView.js",
         "Gui.js",

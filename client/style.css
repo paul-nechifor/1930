@@ -197,6 +197,26 @@ body {
     
 }
 
+#attack-view .answers table td div {
+    background-color: #222;
+    text-align: center;
+    cursor: pointer;
+}
+
+#attack-view .answers table td div:hover {
+    background-color: #333;
+}
+
+#attack-view .answers table td div span {
+    display: block;
+    float: left;
+    border-right: 1px solid #777;
+    padding-right: 0.3em;
+    margin-right: 0.3em;
+    color: #999;
+    height: 100%;
+}
+
 #top-view {
     position: fixed;
     left: 0;

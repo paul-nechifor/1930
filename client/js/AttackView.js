@@ -6,8 +6,8 @@ function AttackView(gui) {
     this.closeElem = null;
     this.questionElem = null;
     this.answersElem = null;
+    this.answers = null;
 }
-
 
 AttackView.prototype.setup = function () {
     this.element = createGuiElement('attack-view');
@@ -29,9 +29,9 @@ AttackView.prototype.setup = function () {
     this.element.appendChild(this.answersElem);
     this.answersElem.setAttribute('class', 'answers');
     
-    this.addFourAnswers();
-    
     this.onResize();
+    
+    this.addFourAnswers();
 };
 
 AttackView.prototype.onResize = function () {
@@ -55,6 +55,12 @@ AttackView.prototype.onResize = function () {
     aStyle.marginBottom =
     aStyle.marginRight = pos.attackViewPadding + 'px';
     qStyle.fontSize = pos.attackViewBigText + 'px';
+    
+    if (this.answers !== null) {
+        for (var i = 0, len = this.answers.length; i < len; i++) {
+            this.answers[i].onResize();
+        }
+    }
 };
 
 AttackView.prototype.onClose = function () {
@@ -69,21 +75,29 @@ AttackView.prototype.open = function () {
     this.show(true);
 };
 
-AttackView.prototype.open = function () {
-    this.show(true);
-};
-
 AttackView.prototype.addFourAnswers = function () {
     var t = document.createElement('table');
     this.answersElem.appendChild(t);
+    
+    this.answers = [];
     
     for (var i = 0; i < 2; i++) {
         var tr = document.createElement('tr');
         t.appendChild(tr);
         for (var j = 0; j < 2; j++) {
-            var td = document.createElement('td');
-            tr.appendChild(td);
-            addText(td, i + ' ' + j);
+            var answer = new AnswerView(this, j, i, i * 2 + j);
+            answer.setup(tr);            
+            this.answers.push(answer);
         }
+    }
+};
+
+AttackView.prototype.onFourAnswer = function (i) {
+    this.onClose();
+    
+    // Removing the listeners from the buttons so that no more answers are
+    // given.
+    for (var k = 0, len = this.answers.length; k < len; k++) {
+        this.answers[k].removeListener();
     }
 };

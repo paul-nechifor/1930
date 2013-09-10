@@ -25,7 +25,9 @@ var DIMS = {
     cameraZoomValues: [3, 5, 7, 9, 11, 13],
     uiDivideSizes: [400, 150, 600, 200, 800, 250, 1000, 280, 320],
     attackViewPaddings: [400, 20, 600, 25, 30],
-    attackViewBigTexts: [400, 16, 600, 20, 800, 25, 30]
+    attackViewBigTexts: [400, 16, 600, 20, 800, 25, 30],
+    answerPaddings: [400, 5, 600, 10, 800, 15, 20],
+    answerFontSizes: [400, 12, 600, 16, 800, 20, 25]
 };
 
 var VALS = {

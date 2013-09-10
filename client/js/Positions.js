@@ -17,6 +17,9 @@ function Positions(data) {
     this.attackViewHeight = -1;
     this.attackViewPadding = -1;
     this.attackViewBigText = -1;
+    this.answerWidth = -1;
+    this.answerPadding = -1;
+    this.answerFontSize = -1;
     
     this.mapRatio = data.size[0] / data.size[1];
 }
@@ -34,4 +37,7 @@ Positions.prototype.realign = function (windowWidth, windowHeight) {
             - this.uiDivideSize;
     this.attackViewPadding = chooseSize(windowHeight, DIMS.attackViewPaddings);
     this.attackViewBigText = chooseSize(windowHeight, DIMS.attackViewBigTexts);
+    this.answerWidth = windowWidth - 3 * this.attackViewPadding;
+    this.answerPadding = chooseSize(windowHeight, DIMS.answerPaddings);
+    this.answerFontSize = chooseSize(windowHeight, DIMS.answerFontSizes);
 }

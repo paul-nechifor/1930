@@ -8,6 +8,7 @@ function TopView(gui) {
 
 TopView.prototype.setup = function () {
     this.element = createGuiElement('top-view');
+    this.element.setAttribute('class', 'unselectable');
     
     setInterval(this.tick.bind(this), 100);
     
