@@ -64,27 +64,19 @@ class AiPlayerEvents implements PlayerEvents {
     }
 
     @Override
-    public void onAttackQuestion(Attack question) {
-        // TODO
+    public void onAttackFaQuestion(Attack attack) {
+    }
+
+    @Override
+    public void onAttackFaResult(Attack attack) {
+    }
+
+    @Override
+    public void onAttackNaResult(Attack attack) {
     }
 
     @Override
     public void onDonatedZones(Player from, Player to, Zone[] zones) {
-        // TODO
-    }
-
-    @Override
-    public void onAnsweredQuestion(Attack question, int answer) {
-        // TODO
-    }
-
-    @Override
-    public void onQuestionDone(Attack question, QuestionAnswers answers) {
-        // TODO
-    }
-
-    @Override
-    public void onAttackDone() {
         // TODO
     }
 

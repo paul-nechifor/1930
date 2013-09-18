@@ -26,7 +26,7 @@ function Positions(data) {
 
 Positions.prototype.realign = function (windowWidth, windowHeight) {
     this.windowWidth = windowWidth;
-    this.windowHeight = windowHeight
+    this.windowHeight = windowHeight;
     this.uiDivideSize = chooseSize(windowHeight, DIMS.uiDivideSizes);
     this.uiDivideY = windowHeight - this.uiDivideSize;
     this.minimapWidth = (this.uiDivideSize * this.mapRatio) | 0;

@@ -53,7 +53,11 @@ public class Room {
         }
 
         @Override
-        public void answerQuestion(Attack question, int answer) {
+        public void answerFaQuestion(Attack question, int answer) {
+        }
+
+        @Override
+        public void answerNaQuestion(Attack question, int answer) {
         }
 
         @Override
@@ -333,19 +337,29 @@ public class Room {
         from.isAttacking = to;
         
         Attack attack = to.attack;
+        boolean newAttack = attack == null;
         
-        if (attack != null) {
-            attack.otherAggressors.add(from);
-        } else {
+        if (newAttack)  {
             attack = new Attack(to, from, 60, questionSet.getRandomFaQuestion(),
                     questionSet.getRandomNaQuestion());
             to.attack = attack;
             roomInfo.attacks.add(attack);
+        } else {
+            attack.otherAggressors.add(from);
         }
         
         // Notify all the players of the attack.
         for (Player player : roomInfo.players) {
             player.playerEvents.onAttackZone(from, to);
+        }
+        
+        // Send the question data to the involved players or newly involved
+        // player.
+        if (newAttack) {
+            from.owner.playerEvents.onAttackFaQuestion(attack);
+            to.owner.playerEvents.onAttackFaQuestion(attack);
+        } else {
+            from.owner.playerEvents.onAttackFaQuestion(attack);
         }
     }
 }

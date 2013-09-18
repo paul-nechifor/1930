@@ -12,7 +12,6 @@ import ro.minimul.romania1930.logic.OwnedZone;
 import ro.minimul.romania1930.logic.Player;
 import ro.minimul.romania1930.logic.PlayerControls;
 import ro.minimul.romania1930.logic.PlayerEvents;
-import ro.minimul.romania1930.logic.QuestionAnswers;
 import ro.minimul.romania1930.logic.RoomInfo;
 
 public class WebPlayerEvents implements PlayerEvents {
@@ -53,28 +52,24 @@ public class WebPlayerEvents implements PlayerEvents {
 
     @Override
     public void onAttackZone(OwnedZone from, OwnedZone to) {
-        connection.sendMessage(new AttackAcceptedMsg(from.zone.id, to.zone.id,
-                to.attack.secondsToAnswer));
+        connection.sendMessage(new AttackAcceptedMsg(to.attack.id, from.zone.id,
+                to.zone.id, to.attack.secondsToAnswer));
     }
 
     @Override
-    public void onAttackQuestion(Attack question) {
+    public void onAttackFaQuestion(Attack attack) {
+    }
+
+    @Override
+    public void onAttackFaResult(Attack attack) {
+    }
+
+    @Override
+    public void onAttackNaResult(Attack attack) {
     }
 
     @Override
     public void onDonatedZones(Player from, Player to, Zone[] zones) {
-    }
-
-    @Override
-    public void onAnsweredQuestion(Attack question, int answer) {
-    }
-
-    @Override
-    public void onQuestionDone(Attack question, QuestionAnswers answers) {
-    }
-
-    @Override
-    public void onAttackDone() {
     }
 
     @Override
