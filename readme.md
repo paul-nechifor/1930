@@ -1,37 +1,36 @@
-România-1930
-============
+# 1930
 
-România-1930 (code name) is a multiplayer quiz game (similar to ConQUIZtador),
-but more massive, urgent, and eternal.
+1930 is a multiplayer quiz game (similar to ConQUIZtador), but more massive,
+urgent, and eternal.
+
+![1930 screenshot](screenshot.png)
 
 This is the prealpha version so I'm not running it yet on my web site.
 
-Running it: the shortest version
---------------------------------
+## Running it: the shortest version
 
 You need Java and Python installed.
 
 Build it:
-    
+
     python build.py
 
 Run the WebSocket server:
 
-    java -jar build/server.jar
+    java -jar build/server/server.jar
 
 Start the HTTP server:
 
-    cd build/http-files
+    cd build/client
     python -m SimpleHTTPServer 7777
 
 On Unix systems run this to start everything for testing purposes:
-    
+
     ./run.sh
 
 Now go to [localhost:7777](http://localhost:7777).
 
-Requirements
-------------
+## Requirements
 
 You need:
 
@@ -40,8 +39,7 @@ You need:
 * A HTTP server to serve the client files. This is optional, you can use Python
 instead.
 
-Configuration
--------------
+## Configuration
 
 The configuration file is `config.json`. You might want to change:
 
@@ -63,8 +61,7 @@ Google Closure.
 * **advanced**: The same with advanced optimizations. Sadly this doesn't work
 now.
 
-Data files
-----------
+## Data files
 
 ### Map
 
@@ -81,8 +78,7 @@ here. I will give them to you if you ask me privately.
 The question files are `data/four-answers` and `data/number-answers`. They are
 in a simple text format and only contain two bogus questions there.
 
-Running
--------
+## Running
 
 Start the WebSocket server:
 
@@ -90,8 +86,12 @@ Start the WebSocket server:
 
 Check the HTTP server. If you don't have one running just use Python for
 testing. Run:
-    
+
     cd build/http-files
     python -m SimpleHTTPServer 7777
 
 and then go to [localhost:7777](http://localhost:7777).
+
+## License
+
+MIT
