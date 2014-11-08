@@ -24,6 +24,7 @@ public class Room {
     private WebMessageRouter messageRouter;
     private RoomInfo roomInfo;
     private AiContainer aiContainer;
+    private RoomThread roomThread;
     
     private class Controls implements PlayerControls {
         final Player player;
@@ -101,13 +102,31 @@ public class Room {
         aiContainer = new AiContainer(config);
         initializeWithBots();
         aiContainer.start();
+        
+        roomThread = new RoomThread(this);
+        roomThread.start();
     }
     
     public synchronized void close() {
+        roomThread.stopRunning();
         for (Player player : roomInfo.players) {
             player.playerEvents.onForcedExit("Going down.");
         }
         aiContainer.stop();
+    }
+    
+    synchronized void tick() {
+        long now = System.nanoTime();
+        
+        for (Attack a : roomInfo.attacks.values()) {
+            if (a.deadline > now) {
+                if (a.state == Attack.FA_QUESTION) {
+                    processOverDeadlineFa(a);
+                } else {
+                    processOverDeadlineNa(a);
+                }
+            }
+        }
     }
     
     public synchronized RoomInfo getRoomInfo() {
@@ -115,7 +134,7 @@ public class Room {
     }
     
     private synchronized Controls tryToAccept(Connection c) {
-        //Player bot = getBestBot();
+        //AiPlayer bot = getBestBot();
         AiPlayer bot = getRandomBot();
         if (bot == null) {
             c.sendMessage(RoomInfoMsg.fromFull());
@@ -302,7 +321,7 @@ public class Room {
         }
         
         if (to.isAttacking != null) {
-            // The zone is attack so it is immune.
+            // The zone is attacking so it is immune.
             return false;
         }
         
@@ -318,13 +337,14 @@ public class Room {
         
         Attack attack = to.attack;
         if (attack != null) {
-            if (player.zones.contains(attack.firstAggressor)) {
-                // You cannot attack the same zone from more than one place.
+            if (attack.state != Attack.FA_QUESTION) {
+                // You can only attack a zone which is in the first stage.
                 return false;
             }
-            for (OwnedZone z : attack.otherAggressors) {
-                if (player.zones.contains(z)) {
-                    // You cannot attack the same zone from more than one place.
+            
+            for (AnswerZone az : attack.aggressors) {
+                if (player.zones.contains(az.ownedZone)) {
+                    // You cannot attack the same zone from more than one zone.
                     return false;
                 }
             }
@@ -340,12 +360,11 @@ public class Room {
         boolean newAttack = attack == null;
         
         if (newAttack)  {
-            attack = new Attack(to, from, 60, questionSet.getRandomFaQuestion(),
-                    questionSet.getRandomNaQuestion());
+            attack = Attack.create(to, from, 60, questionSet);
             to.attack = attack;
-            roomInfo.attacks.add(attack);
+            roomInfo.attacks.put(attack.id, attack);
         } else {
-            attack.otherAggressors.add(from);
+            attack.addAggressor(from);
         }
         
         // Notify all the players of the attack.
@@ -361,5 +380,94 @@ public class Room {
         } else {
             from.owner.playerEvents.onAttackFaQuestion(attack);
         }
+    }
+    
+    private void processOverDeadlineFa(Attack attack) {
+        int correct = attack.faQuestion.correct;
+        
+        List<AnswerZone> correctOnes = new ArrayList<AnswerZone>();
+        
+        for (AnswerZone az : attack.aggressors) {
+            if (az.faAnswer == correct) {
+                correctOnes.add(az);
+            }
+        }
+        
+        if (attack.victim.faAnswer == correct) {
+            correctOnes.add(attack.victim);
+        }
+        
+        // If there is a clear winner the attack is over.
+        if (correctOnes.size() == 1) {
+            endAttackAtFa(attack, correctOnes.get(0));
+        // Else move to the next stage.
+        } else {
+            moveToNaQuestion(attack, correctOnes);
+        }
+    }
+    
+    private void processOverDeadlineNa(Attack attack) {
+        int correct = attack.naQuestion.answer;
+        List<AnswerZone> whoCanAnswer = getWhoCanAnswer(attack);
+        AnswerZone winner = AnswerZone.getWinner(whoCanAnswer, correct);
+        endAttackAtNa(attack, winner);
+    }
+    
+    private void moveToNaQuestion(Attack attack, List<AnswerZone> correctOnes) {
+        setWhoCanAnswer(attack, correctOnes);
+    }
+    
+    private void endAttackAtFa(Attack attack, AnswerZone winner) {
+        ;;; // TODO
+        
+        endAttack(attack, winner);
+    }
+    
+    private void endAttackAtNa(Attack attack, AnswerZone winner) {
+        ;;; // TODO
+        
+        endAttack(attack, winner);
+    }
+    
+    private void endAttack(Attack attack, AnswerZone winner) {
+        AnswerZone loser = (attack.victim == winner)
+                ? attack.aggressors.get(0)
+                : attack.victim;
+        
+        transforZone(loser.ownedZone, loser.ownedZone.owner,
+                winner.ownedZone.owner);
+        
+        roomInfo.attacks.remove(attack.id);
+    }
+    
+    private void setWhoCanAnswer(Attack attack, List<AnswerZone> correctOnes) {
+        // If none got it right, they all go in the next stage.
+        if (correctOnes.isEmpty()) {
+            attack.victim.canAnswerNa = true;
+            for (AnswerZone az : attack.aggressors) {
+                az.canAnswerNa = true;
+            }
+        // Else, only the ones that got it right can answer.
+        } else {
+            for (AnswerZone az : correctOnes) {
+                az.canAnswerNa = true;
+            }
+        }
+    }
+    
+    private List<AnswerZone> getWhoCanAnswer(Attack attack) {
+        List<AnswerZone> ret = new ArrayList<AnswerZone>();
+        
+        if (attack.victim.canAnswerNa) {
+            ret.add(attack.victim);
+        }
+        
+        for (AnswerZone az : attack.aggressors) {
+            if (az.canAnswerNa) {
+                ret.add(az);
+            }
+        }
+        
+        return ret;
     }
 }

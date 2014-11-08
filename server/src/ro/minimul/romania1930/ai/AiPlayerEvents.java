@@ -8,14 +8,12 @@ import ro.minimul.romania1930.logic.OwnedZone;
 import ro.minimul.romania1930.logic.Player;
 import ro.minimul.romania1930.logic.PlayerControls;
 import ro.minimul.romania1930.logic.PlayerEvents;
-import ro.minimul.romania1930.logic.QuestionAnswers;
 import ro.minimul.romania1930.logic.RoomInfo;
 import ro.minimul.romania1930.util.Timer;
 import ro.minimul.romania1930.util.Util;
 
 class AiPlayerEvents implements PlayerEvents {
-    private final static long NANO = 1000000000;
-    private final Timer tryToAttack = new Timer(20 * NANO);
+    private final Timer tryToAttack = new Timer(20 * Util.NANO);
     
     private Player self;
     private PlayerControls controls;

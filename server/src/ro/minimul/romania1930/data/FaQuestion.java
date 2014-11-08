@@ -9,15 +9,12 @@ import java.util.Scanner;
 public class FaQuestion {
     public final String text;
     public final String[] answers;
+    public final int correct;
     
-    /**
-     * 
-     * @param text
-     * @param answers The first one is supposed to be the correct one.
-     */
-    public FaQuestion(String text, String[] answers) {
+    public FaQuestion(String text, String[] answers, int correct) {
         this.text = text;
         this.answers = answers;
+        this.correct = correct;
     }
     
     public static FaQuestion[] loadFaQuestions(File file)
@@ -35,12 +32,8 @@ public class FaQuestion {
             for (int i = 0; i < answers.length; i++) {
                 answers[i] = in.nextLine();
             }
-            correct = Integer.parseInt(in.nextLine()) - 1;
-            String tmp = answers[correct];
-            answers[correct] = answers[0];
-            answers[0] = tmp;
-            
-            ret.add(new FaQuestion(text, answers));
+            correct = Integer.parseInt(in.nextLine()) - 1;            
+            ret.add(new FaQuestion(text, answers, correct));
         }
         
         return ret.toArray(new FaQuestion[0]);

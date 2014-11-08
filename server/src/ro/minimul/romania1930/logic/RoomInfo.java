@@ -1,6 +1,7 @@
 package ro.minimul.romania1930.logic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import ro.minimul.romania1930.data.Config;
 import ro.minimul.romania1930.data.Map;
@@ -10,7 +11,7 @@ public class RoomInfo {
     public final boolean[] idUsed;
     public final Map map;
     public final OwnedZone[] zones;
-    public final List<Attack> attacks = new ArrayList<Attack>();
+    public final HashMap<Integer, Attack> attacks = new HashMap<Integer, Attack>();
     
     RoomInfo(Map map, Config config) {
         this.map = map;

@@ -41,6 +41,11 @@ public abstract class Player<T extends PlayerEvents> {
         return ret;
     }
     
+    /**
+     * @deprecated Why not just attack at random and let Room tell you if you 
+     * are allowed or not.
+     * @return 
+     */
     public Set<OwnedZone> getAttackableNeighbors() {
         final Set<OwnedZone> ret = new HashSet<OwnedZone>();
         
@@ -57,14 +62,16 @@ public abstract class Player<T extends PlayerEvents> {
                     continue skipZone;
                 }
                 
-                // Not zones which I am already attacking.
                 Attack a = neigh.attack;
                 if (a != null) {
-                    if (zones.contains(a.firstAggressor)) {
+                    // Not zones past the first stage.
+                    if (a.state != Attack.FA_QUESTION) {
                         continue skipZone;
                     }
-                    for (OwnedZone o : a.otherAggressors) {
-                        if (zones.contains(o)) {
+                    
+                    // Not zones which I am already attacking.
+                    for (AnswerZone az : a.aggressors) {
+                        if (zones.contains(az.ownedZone)) {
                             continue skipZone;
                         }
                     }

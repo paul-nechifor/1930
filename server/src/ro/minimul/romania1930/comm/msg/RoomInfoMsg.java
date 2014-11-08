@@ -42,11 +42,12 @@ public class RoomInfoMsg implements Message {
     }
     
     private static AttackSubMsg[] getAttacks(RoomInfo roomInfo) {
-        List<Attack> attacks = roomInfo.attacks;
-        AttackSubMsg[] ret = new AttackSubMsg[attacks.size()];
+        AttackSubMsg[] ret = new AttackSubMsg[roomInfo.attacks.size()];
         
-        for (int i = 0; i < ret.length; i++) {
-            ret[i] = attacks.get(i).getSubMsg();
+        int i = 0;
+        for (Attack attack : roomInfo.attacks.values()) {
+            //ret[i] = attack.getSubMsg();
+            i++;
         }
         
         return ret;

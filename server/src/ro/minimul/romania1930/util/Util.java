@@ -10,6 +10,8 @@ public class Util {
             new File(Util.class.getProtectionDomain()
             .getCodeSource().getLocation().getPath()).getParentFile();
     
+    public static final long NANO = 1000000000;
+    
     private Util() {
     }
     

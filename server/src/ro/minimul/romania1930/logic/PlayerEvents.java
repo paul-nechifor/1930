@@ -27,7 +27,7 @@ public interface PlayerEvents {
     
     /**
      * This notifies all players of a new attack or of a new player joining in
-     * the attack.
+     * the attack. The attack object will be at to.attack.
      * 
      * @param attack
      */
@@ -35,7 +35,7 @@ public interface PlayerEvents {
     
     /**
      * This notifies all the involved players of the four answer question data.
-     * This will initially be send to the two players in the initial attack and
+     * This will initially be sent to the two players in the initial attack and
      * then to all the players who join in. This is always sent after
      * {@link #onAttackZone(ro.minimul.romania1930.logic.Attack) onAttackZone()}.
      * 
