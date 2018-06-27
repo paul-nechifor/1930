@@ -1,3 +1,7 @@
+# This repository has been moved to [gitlab.com/paul-nechifor/1930](http://gitlab.com/paul-nechifor/1930).
+
+Old readme:
+
 # 1930
 
 1930 is a multiplayer quiz game (similar to ConQUIZtador), but more massive,
